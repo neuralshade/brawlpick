@@ -123,6 +123,7 @@ function App() {
       {
         id: Date.now(),
         firstPickTeam,
+        mapMode: selectedMapMode,
         slots: slots.map((hero, index) => ({
           slot: slotLabels[index],
           hero,
@@ -351,6 +352,27 @@ function App() {
               const blueSlots = comp.slots.slice(3, 6);
               return (
                 <article key={comp.id} className="saved-item">
+                  <div
+                    className="saved-map-info"
+                    style={{
+                      marginBottom: "1rem",
+                      paddingBottom: "0.75rem",
+                      borderBottom: "1px solid #cbd5e1",
+                    }}
+                  >
+                    <span style={{ fontWeight: "700", color: "#0f172a" }}>
+                      {comp.mapMode.map}
+                    </span>
+                    <span
+                      style={{
+                        color: "#64748b",
+                        marginLeft: "0.5rem",
+                        fontSize: "0.9rem",
+                      }}
+                    >
+                      · {comp.mapMode.mode}
+                    </span>
+                  </div>
                   <div className="saved-teams">
                     <div className="saved-team red-team">
                       <h3>
