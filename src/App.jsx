@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import MatchMaker from './pages/MatchMaker';
 import Statistics from './pages/Statistics';
 
 function App() {
+  // Estado global da base de dados em memória
+  const [savedComps, setSavedComps] = useState([]);
+
   return (
     <BrowserRouter>
       {/* Barra de Navegação (Menu) */}
@@ -22,10 +25,16 @@ function App() {
         </Link>
       </nav>
 
-      {/* Configuração das Rotas */}
+      {/* Configuração das Rotas passando o estado compartilhado */}
       <Routes>
-        <Route path="/" element={<MatchMaker />} />
-        <Route path="/stats" element={<Statistics />} />
+        <Route 
+          path="/" 
+          element={<MatchMaker savedComps={savedComps} setSavedComps={setSavedComps} />} 
+        />
+        <Route 
+          path="/stats" 
+          element={<Statistics savedComps={savedComps} setSavedComps={setSavedComps} />} 
+        />
       </Routes>
     </BrowserRouter>
   );

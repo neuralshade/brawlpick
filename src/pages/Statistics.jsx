@@ -1,11 +1,9 @@
-import React, { useState, useRef, useMemo } from 'react';
+import React, { useRef, useMemo, useState } from 'react';
 
-export default function Statistics() {
-  const [savedComps, setSavedComps] = useState(null);
+export default function Statistics({ savedComps, setSavedComps }) {
   const [error, setError] = useState('');
   const fileInputRef = useRef(null);
 
-  // Função para ler e processar o arquivo JSON local
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
     if (!file) return;
@@ -19,14 +17,13 @@ export default function Statistics() {
         setError('');
       } catch (err) {
         setError('Erro ao processar o arquivo JSON. Verifique se o formato está correto.');
-        setSavedComps(null);
       }
     };
 
     reader.readAsText(file);
+    event.target.value = null;
   };
 
-  // Processamento de dados em memória (Exemplo: Contagem de Picks por Brawler)
   const brawlerStats = useMemo(() => {
     if (!Array.isArray(savedComps)) return [];
     
@@ -41,13 +38,11 @@ export default function Statistics() {
       }
     });
     
-    // Transforma o objeto em array e ordena do mais escolhido para o menos escolhido
     return Object.entries(counts).sort((a, b) => b[1] - a[1]);
   }, [savedComps]);
 
   return (
     <main className="app-shell">
-      {/* Seção de Upload com visual inspirado na seleção de mapas */}
       <section className="map-mode-card">
         <div className="map-mode-header" style={{ marginBottom: '1rem', flexDirection: 'column', alignItems: 'flex-start' }}>
           <h1 style={{ 
@@ -58,7 +53,7 @@ export default function Statistics() {
             📊 Estatísticas e Base de Dados Local
           </h1>
           <p style={{ color: '#cbd5e1', fontSize: '1rem', marginTop: '0.5rem' }}>
-            Carregue um arquivo JSON com o histórico de composições para visualizar estatísticas detalhadas.
+            A base de dados atual possui <b>{savedComps?.length || 0}</b> composições.
           </p>
         </div>
         
@@ -71,26 +66,19 @@ export default function Statistics() {
             onChange={handleFileUpload}
           />
           <button onClick={() => fileInputRef.current.click()}>
-            📂 Abrir Base de Dados Local
+            📂 Abrir/Atualizar JSON
           </button>
-          
-          {savedComps && (
-            <span className="toast-message" style={{ display: 'flex', alignItems: 'center' }}>
-              Base carregada com sucesso! ({savedComps.length} composições lidas)
-            </span>
-          )}
         </div>
         
         {error && <div style={{ color: '#f87171', marginTop: '1rem', fontWeight: 'bold' }}>{error}</div>}
       </section>
 
-      {/* Painel de Resultados estilo "Team Column" da página principal */}
-      {savedComps && (
+      {savedComps && savedComps.length > 0 && (
         <section className="pick-grid" style={{ gridTemplateColumns: '1fr' }}>
           <div className="team-column">
             <div className="team-header">
               <h2 style={{ margin: 0 }}>🏆 Brawlers Mais Escolhidos</h2>
-              <span style={{ fontSize: '0.9rem', color: '#cbd5e1' }}>Baseado no histórico carregado</span>
+              <span style={{ fontSize: '0.9rem', color: '#cbd5e1' }}>Baseado na memória compartilhada</span>
             </div>
             
             <div className="slot-row" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))' }}>
