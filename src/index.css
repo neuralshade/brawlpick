@@ -612,7 +612,6 @@ button, select, input, textarea {
     border-radius: 8px;
     color: #fff;
     cursor: pointer;
-    font-weight: bold;
 }
 
 .btn-save {
@@ -622,7 +621,6 @@ button, select, input, textarea {
     border-radius: 8px;
     color: #fff;
     cursor: pointer;
-    font-weight: bold;
 }
 
 .stats-toast-error {
@@ -641,6 +639,7 @@ button, select, input, textarea {
 .filters-title {
     color: #fff;
     margin-top: 0;
+    font-weight: initial;
 }
 
 .filters-grid {

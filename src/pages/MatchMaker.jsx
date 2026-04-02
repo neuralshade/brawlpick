@@ -62,6 +62,7 @@ function MatchMaker({ savedComps, setSavedComps }) {
     setSavedComps((prev) => [
       {
         id: Date.now(),
+        date: new Date().toISOString(), // Adiciona a data da partida
         firstPickTeam,
         mapMode: selectedMapMode,
         notes: notes,
@@ -74,7 +75,7 @@ function MatchMaker({ savedComps, setSavedComps }) {
           hero,
           order: orderLabels[index] || `Pick ${index + 1}`,
         })),
-        stats: { matchesPlayed: 0, wins: 0, losses: 0, winRate: 0 } 
+        result: null // O resultado inicia como nulo/pendente
       },
       ...prev,
     ]);
@@ -82,7 +83,7 @@ function MatchMaker({ savedComps, setSavedComps }) {
     setSlots(Array(6).fill(""));
     setBanSlots(Array(6).fill(""));
     setNotes("");
-    setShowToast("Draft successfully saved to memory!");
+    setShowToast("Match draft successfully saved to memory!");
   };
 
   useEffect(() => {
