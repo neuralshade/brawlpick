@@ -57,8 +57,8 @@ select {
 }
 
 .map-mode-card {
-    background: #ffffff;
-    border: 1px solid #d1d5db;
+    background: rgba(0, 0, 0, 0.25);
+    border: 2px solid #000;
     padding: 1.25rem;
     box-shadow: 0 24px 40px rgba(15, 23, 42, 0.06);
     margin-bottom: 1.5rem;
@@ -73,17 +73,17 @@ select {
 
 .map-mode-header span {
     font-size: 1rem;
+    color: #fff;
 }
 
 .map-mode-header p {
     margin: 0.35rem 0 0;
-    color: #64748b;
     font-size: 0.95rem;
 }
 
 .map-mode-selected {
     font-size: 0.95rem;
-    color: #475569;
+    color: #fff;
     white-space: nowrap;
 }
 
@@ -95,9 +95,8 @@ select {
 
 .map-mode-option {
     text-align: left;
-    padding: 1rem;
-    border-radius: 1rem;
-    border: 1px solid #e2e8f0;
+    padding: 0.9rem;
+    border: 2px solid #000;
     background: #f8fafc;
     color: #0f172a;
     cursor: pointer;
@@ -127,12 +126,26 @@ select {
 }
 
 .map-mode-group-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     font-size: 1rem;
-    color: #64748b; /* Uma cor cinza sutil */
+    color: #fff;
     margin-bottom: 0.75rem;
     text-transform: uppercase;
-    border-bottom: 1px solid #e2e8f0;
     padding-bottom: 0.25rem;
+    text-shadow:
+        0 0 2px #000,
+        0 0 4px #000,
+        1px 1px 0 #000,
+        -1px -1px 0 #000,
+        2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.mode-icon {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
 }
 
 .fp-alone {
@@ -205,9 +218,8 @@ select {
 
 .team-column {
     width: 100%;
-    background: #ffffff;
-    border: 1px solid #d1d5db;
-    border-radius: 1.25rem;
+    background: rgba(0, 0, 0, 0.25);
+    border: 2px solid #000;
     padding: 1.25rem;
     box-shadow: 0 24px 40px rgba(15, 23, 42, 0.06);
 }
@@ -218,22 +230,17 @@ select {
     align-items: center;
     gap: 0.35rem;
     margin-bottom: 1rem;
+    color: #fff;
+    text-shadow:
+        0 0 2px #000,
+        0 0 4px #000,
+        1px 1px 0 #000,
+        -1px -1px 0 #000,
+        2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
 .team-header span {
     font-size: 1.05rem;
-}
-
-.team-header small {
-    color: #64748b;
-}
-
-.red-team {
-    border-color: rgba(248, 113, 113, 0.3);
-}
-
-.blue-team {
-    border-color: rgba(59, 130, 246, 0.35);
 }
 
 .slot-row {

@@ -143,6 +143,24 @@ function App() {
     return acc;
   }, {});
 
+  const mapFiles = import.meta.glob("./assets/maps/*", {
+    eager: true,
+    import: "default",
+  });
+
+  const MAP_ICONS = Object.fromEntries(
+    Object.entries(mapFiles).map(([path, url]) => {
+      const fileName = path
+        .replace(/\\/g, "/")
+        .split("/")
+        .pop()
+        .replace(/\.[^/.]+$/, ""); // Remove qualquer extensão (.webp, .png, etc)
+      return [fileName, url];
+    }),
+  );
+
+  const getModeIcon = (modeName) => MAP_ICONS[modeName.replace(/ /g, "_")];
+
   return (
     <main className="app-shell">
       <div className="fp-top">
@@ -179,7 +197,16 @@ function App() {
         <div className="map-groups-container">
           {Object.entries(GROUPED_MAPS).map(([mode, maps]) => (
             <div key={mode} className="map-mode-group">
-              <h3 className="map-mode-group-title">{mode}</h3>
+              <h3 className="map-mode-group-title">
+                {getModeIcon(mode) && (
+                  <img
+                    src={getModeIcon(mode)}
+                    alt={mode}
+                    className="mode-icon"
+                  />
+                )}
+                <span>{mode}</span>
+              </h3>
               <div className="map-mode-grid">
                 {maps.map((option) => (
                   <button
@@ -202,7 +229,7 @@ function App() {
       <section className="pick-grid">
         <div className="team-column blue-team">
           <div className="team-header">
-            <span>Blue Team</span>
+            <span>BLUE TEAM</span>
             <small>{firstPickTeam === "blue" ? "First Pick" : "Pick 2"}</small>
           </div>
           <div className="slot-row">
@@ -279,7 +306,7 @@ function App() {
 
         <div className="team-column red-team">
           <div className="team-header">
-            <span>Red Team</span>
+            <span>RED TEAM</span>
             <small>{firstPickTeam === "red" ? "First Pick" : "Pick 2"}</small>
           </div>
           <div className="slot-row">
