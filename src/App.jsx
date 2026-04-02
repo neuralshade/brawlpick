@@ -4,28 +4,39 @@ import MatchMaker from './pages/MatchMaker';
 import Statistics from './pages/Statistics';
 
 function App() {
-  // Estado global da base de dados em memória
   const [savedComps, setSavedComps] = useState([]);
 
   return (
     <BrowserRouter>
-      {/* Barra de Navegação (Menu) */}
+      {/* Barra de Navegação estilizada seguindo o design do MatchMaker */}
       <nav style={{ 
         display: 'flex', 
-        gap: '20px', 
+        gap: '30px', 
         padding: '15px 30px', 
-        background: '#1a1a2e',
-        borderBottom: '2px solid #0f3460'
+        background: 'rgba(0, 0, 0, 0.25)',
+        borderBottom: '2px solid #000',
+        boxShadow: '0 24px 40px rgba(15, 23, 42, 0.06)'
       }}>
-        <Link to="/" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold', fontSize: '18px' }}>
-          🎮 Match Maker
+        <Link to="/" style={{ 
+          color: 'white', 
+          textDecoration: 'none', 
+          fontWeight: 'bold', 
+          fontSize: '18px',
+          textShadow: '0 0 2px #000, 0 0 4px #000, 1px 1px 0 #000, -1px -1px 0 #000, 2px 2px 4px rgba(0, 0, 0, 0.7)'
+        }}>
+          MATCH MAKER
         </Link>
-        <Link to="/stats" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold', fontSize: '18px' }}>
-          📊 Estatísticas
+        <Link to="/stats" style={{ 
+          color: 'white', 
+          textDecoration: 'none', 
+          fontWeight: 'bold', 
+          fontSize: '18px',
+          textShadow: '0 0 2px #000, 0 0 4px #000, 1px 1px 0 #000, -1px -1px 0 #000, 2px 2px 4px rgba(0, 0, 0, 0.7)'
+        }}>
+          STATISTICS
         </Link>
       </nav>
 
-      {/* Configuração das Rotas passando o estado compartilhado */}
       <Routes>
         <Route 
           path="/" 

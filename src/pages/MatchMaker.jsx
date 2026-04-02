@@ -11,10 +11,9 @@ function MatchMaker({ savedComps, setSavedComps }) {
   const [activeSlot, setActiveSlot] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedMapMode, setSelectedMapMode] = useState(MAP_MODE_OPTIONS[0]);
-  const [notes, setNotes] = useState(""); // Novo estado para anotações do mapa
+  const [notes, setNotes] = useState("");
   const [showToast, setShowToast] = useState("");
 
-  // Heróis selecionados (tanto pickados quanto banidos) ficam indisponíveis
   const selectedHeroes = useMemo(() => 
     new Set([...slots.filter(Boolean), ...banSlots.filter(Boolean)]), 
   [slots, banSlots]);
@@ -56,7 +55,6 @@ function MatchMaker({ savedComps, setSavedComps }) {
     setBanSlots(nextBans);
   };
 
-  // Permite salvar apenas se todos os picks e bans estiverem preenchidos
   const canSave = slots.every(Boolean) && banSlots.every(Boolean);
 
   const saveComposition = () => {
@@ -66,7 +64,7 @@ function MatchMaker({ savedComps, setSavedComps }) {
         id: Date.now(),
         firstPickTeam,
         mapMode: selectedMapMode,
-        notes: notes, // Salvando a anotação do mapa específico
+        notes: notes,
         bans: {
           red: banSlots.slice(0, 3),
           blue: banSlots.slice(3, 6)
@@ -81,11 +79,10 @@ function MatchMaker({ savedComps, setSavedComps }) {
       ...prev,
     ]);
     
-    // Reseta o draft
     setSlots(Array(6).fill(""));
     setBanSlots(Array(6).fill(""));
     setNotes("");
-    setShowToast("Composição e Bans salvos na memória!");
+    setShowToast("Draft successfully saved to memory!");
   };
 
   useEffect(() => {
@@ -129,54 +126,69 @@ function MatchMaker({ savedComps, setSavedComps }) {
         setSelectedMapMode={setSelectedMapMode} 
       />
 
-      {/* --- FASE DE BANS --- */}
-      <section style={{ margin: '15px 0', padding: '15px', background: '#1a1a2e', borderRadius: '12px', border: '2px solid #0f3460' }}>
-        <h3 style={{ textAlign: 'center', color: '#fff', marginTop: 0 }}>Fase de Banimentos</h3>
-        <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px' }}>
-          
-          <div style={{ flex: 1, minWidth: '150px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <span style={{ color: '#ef4444', fontWeight: 'bold' }}>Bans do Red Team</span>
-            {[0, 1, 2].map(idx => (
-              <select key={`red-ban-${idx}`} value={banSlots[idx]} onChange={(e) => handleBanChange(idx, e.target.value)} style={{ padding: '8px', background: '#2d0000', color: '#fff', borderRadius: '4px', border: '1px solid #ef4444' }}>
-                <option value="">Selecionar Ban...</option>
-                {BRAWLERS.map(b => <option key={b} value={b} disabled={selectedHeroes.has(b) && banSlots[idx] !== b}>{b}</option>)}
-              </select>
-            ))}
+      {/* --- BAN PHASE --- */}
+      <section className="pick-grid" style={{ marginBottom: '1.5rem' }}>
+        <div className="team-column blue-team">
+          <div className="team-header">
+            <span>BLUE TEAM BANS</span>
           </div>
-
-          <div style={{ flex: 1, minWidth: '150px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <span style={{ color: '#3b82f6', fontWeight: 'bold' }}>Bans do Blue Team</span>
+          <div className="slot-row" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))' }}>
             {[3, 4, 5].map(idx => (
-              <select key={`blue-ban-${idx}`} value={banSlots[idx]} onChange={(e) => handleBanChange(idx, e.target.value)} style={{ padding: '8px', background: '#00102d', color: '#fff', borderRadius: '4px', border: '1px solid #3b82f6' }}>
-                <option value="">Selecionar Ban...</option>
-                {BRAWLERS.map(b => <option key={b} value={b} disabled={selectedHeroes.has(b) && banSlots[idx] !== b}>{b}</option>)}
-              </select>
+              <article key={`blue-ban-${idx}`} className="slot-card" style={{ padding: '1rem' }}>
+                <select 
+                  value={banSlots[idx]} 
+                  onChange={(e) => handleBanChange(idx, e.target.value)} 
+                  style={{ width: '100%', padding: '0.75rem', background: '#fff', color: '#0f172a', border: '1px solid #cbd5e1', borderRadius: '0.5rem', fontFamily: 'inherit', fontSize: '0.95rem' }}
+                >
+                  <option value="">Ban...</option>
+                  {BRAWLERS.map(b => <option key={b} value={b} disabled={selectedHeroes.has(b) && banSlots[idx] !== b}>{b}</option>)}
+                </select>
+              </article>
             ))}
           </div>
+        </div>
 
+        <div className="team-column red-team">
+          <div className="team-header">
+            <span>RED TEAM BANS</span>
+          </div>
+          <div className="slot-row" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))' }}>
+            {[0, 1, 2].map(idx => (
+              <article key={`red-ban-${idx}`} className="slot-card" style={{ padding: '1rem' }}>
+                <select 
+                  value={banSlots[idx]} 
+                  onChange={(e) => handleBanChange(idx, e.target.value)} 
+                  style={{ width: '100%', padding: '0.75rem', background: '#fff', color: '#0f172a', border: '1px solid #cbd5e1', borderRadius: '0.5rem', fontFamily: 'inherit', fontSize: '0.95rem' }}
+                >
+                  <option value="">Ban...</option>
+                  {BRAWLERS.map(b => <option key={b} value={b} disabled={selectedHeroes.has(b) && banSlots[idx] !== b}>{b}</option>)}
+                </select>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
-      {/* --- FIM DA FASE DE BANS --- */}
+      {/* --- END BAN PHASE --- */}
 
       <section className="pick-grid">
         <TeamColumn teamName="BLUE TEAM" teamClass="blue-team" glowClass="blue-glow" startIndex={3} teamSlots={slots.slice(3, 6)} {...commonTeamProps} />
         <TeamColumn teamName="RED TEAM" teamClass="red-team" glowClass="red-glow" startIndex={0} teamSlots={slots.slice(0, 3)} {...commonTeamProps} />
       </section>
 
-      {/* --- ANOTAÇÕES DO MAPA --- */}
-      <section style={{ padding: '0 10px' }}>
+      {/* --- DRAFT NOTES --- */}
+      <section className="map-mode-card" style={{ marginBottom: '1.5rem', padding: '1.25rem' }}>
         <textarea 
-          placeholder="Anotações estratégicas para este mapa/draft (Ex: Rotacionar pelo mato esquerdo, focar controle do mid...)"
+          placeholder="Strategic notes for this map/draft (e.g., Rotate through the left bush, focus on mid control...)"
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
-          style={{ width: '100%', padding: '12px', background: '#111', color: '#fff', border: '1px solid #444', borderRadius: '8px', minHeight: '80px', fontFamily: 'inherit' }}
+          style={{ width: '100%', padding: '12px', background: '#fff', color: '#0f172a', border: '2px solid #000', borderRadius: '0', minHeight: '80px', fontFamily: 'inherit', fontSize: '1rem' }}
         />
       </section>
 
       <section className="actions-card">
         {showToast && <span className="toast-message" style={{ color: '#10b981', fontWeight: 'bold' }}>{showToast}</span>}
         <button disabled={!canSave} onClick={saveComposition} style={{ opacity: canSave ? 1 : 0.5, cursor: canSave ? 'pointer' : 'not-allowed', width: '100%', padding: '15px', fontSize: '1.2rem', marginTop: '10px' }}>
-          Salvar Draft na Memória
+          Save Draft to Memory
         </button>
       </section>
 
