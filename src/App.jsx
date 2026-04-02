@@ -146,7 +146,7 @@ function App() {
       <section className="actions-card">
         {showToast && <span className="toast-message">Composition saved!</span>}
         <button disabled={!canSave} onClick={saveComposition}>
-          Save composition
+          Save
         </button>
       </section>
 
