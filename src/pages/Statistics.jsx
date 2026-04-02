@@ -36,7 +36,7 @@ export default function Statistics({ savedComps, setSavedComps }) {
           notes: match.notes || '',
           bans: match.bans || { red: [], blue: [] },
           slots: Array.isArray(match.slots) ? match.slots : [],
-          result: match.result || null // Retrocompatibilidade ou null
+          result: match.result || null 
         }));
         setSavedComps(formattedData);
         setError('');
@@ -100,7 +100,6 @@ export default function Statistics({ savedComps, setSavedComps }) {
   const winRateStats = useMemo(() => {
     const stats = {};
     filteredComps.forEach(match => {
-      // Conta apenas as partidas que já têm um resultado definido
       if (match.result === 'win' || match.result === 'loss') {
         if (match.slots) {
           match.slots.forEach(s => {
@@ -117,17 +116,6 @@ export default function Statistics({ savedComps, setSavedComps }) {
       .map(([name, data]) => ({ name, played: data.played, winRate: ((data.wins / data.played) * 100).toFixed(1) }))
       .sort((a, b) => parseFloat(b.winRate) - parseFloat(a.winRate));
   }, [filteredComps]);
-
-  // Define se a partida foi ganha ou perdida
-  const registerResult = (compIndex, result) => {
-    const newComps = [...savedComps];
-    const realIndex = savedComps.findIndex(c => c.id === filteredComps[compIndex].id);
-    if (realIndex > -1) {
-      newComps[realIndex].result = result; // Define ou atualiza o resultado
-      setSavedComps(newComps);
-      setShowToast(`Resultado da partida atualizado!`);
-    }
-  };
 
   const uniqueModes = ['Todos', ...new Set(MAP_MODE_OPTIONS.map(m => m.mode))];
   const uniqueMaps = ['Todos', ...new Set(MAP_MODE_OPTIONS.map(m => m.map))];
@@ -214,51 +202,6 @@ export default function Statistics({ savedComps, setSavedComps }) {
           ) : <p className="empty-text">Nenhuma partida finalizada neste filtro.</p>}
         </div>
       </div>
-
-      <section className="notes-feed-section">
-        <h2 className="notes-feed-title">Histórico de Partidas</h2>
-        <p className="notes-feed-subtitle">Defina o resultado de cada partida para que as estatísticas de Win Rate sejam geradas com precisão.</p>
-        
-        <div className="notes-list">
-          {filteredComps.map((match, idx) => {
-            const dateStr = new Date(match.date || match.id).toLocaleDateString();
-            return (
-              <div key={match.id} className="note-card">
-                <div className="note-header">
-                  <div>
-                    <h4 className="note-map-title">{match.mapMode.map} - {match.mapMode.mode}</h4>
-                    <p className="note-text">
-                      <strong>Comentário: </strong> {match.notes ? match.notes : "Sem comentários."}
-                    </p>
-                    <p className="note-stats">
-                      <strong>Data:</strong> {dateStr} | <strong>Status:</strong> {
-                        match.result === 'win' ? '🟢 Vitória' : match.result === 'loss' ? '🔴 Derrota' : '⚪ Pendente'
-                      }
-                    </p>
-                  </div>
-                  <div className="note-actions">
-                    <button 
-                      style={{ opacity: match.result === 'loss' ? 0.5 : 1 }} 
-                      className="btn-win" 
-                      onClick={() => registerResult(idx, 'win')}
-                    >
-                      {match.result === 'win' ? 'Vitória Registrada' : 'Marcar Vitória'}
-                    </button>
-                    <button 
-                      style={{ opacity: match.result === 'win' ? 0.5 : 1 }} 
-                      className="btn-loss" 
-                      onClick={() => registerResult(idx, 'loss')}
-                    >
-                      {match.result === 'loss' ? 'Derrota Registrada' : 'Marcar Derrota'}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-          {filteredComps.length === 0 && <p className="empty-text">Nenhuma partida encontrada.</p>}
-        </div>
-      </section>
     </main>
   );
 }
