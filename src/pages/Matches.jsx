@@ -23,6 +23,10 @@ export default function Matches({ savedComps, setSavedComps }) {
           const dateStr = new Date(match.date || match.id).toLocaleDateString();
           const redSlots = match.slots.slice(0, 3);
           const blueSlots = match.slots.slice(3, 6);
+          
+          // Recupera os bans (com fallback para arrays vazios caso sejam partidas antigas salvas sem bans)
+          const redBans = match.bans?.red || [];
+          const blueBans = match.bans?.blue || [];
 
           return (
             <div key={match.id} className="map-mode-card">
@@ -59,10 +63,22 @@ export default function Matches({ savedComps, setSavedComps }) {
               </div>
 
               <div className="pick-grid">
+                {/* BLUE TEAM */}
                 <div className="team-column blue-team">
                   <div className="team-header">
                     <span>BLUE TEAM {match.firstPickTeam === TEAM_BLUE && '(FP)'}</span>
                   </div>
+                  
+                  {/* Seção de Bans do Time Azul */}
+                  {blueBans.length > 0 && (
+                    <div style={{ display: 'flex', gap: '8px', padding: '8px', background: 'rgba(0,0,0,0.2)', borderRadius: '8px', marginBottom: '12px', alignItems: 'center' }}>
+                      <span style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: 'bold' }}>BANS:</span>
+                      {blueBans.map((ban, idx) => (
+                        ban ? <img key={`blue-ban-${idx}`} src={getBrawlerImage(ban)} alt={ban} title={ban} style={{ width: '28px', height: '28px', borderRadius: '50%', border: '1px solid #ef4444', objectFit: 'cover' }} /> : null
+                      ))}
+                    </div>
+                  )}
+
                   <div className="slot-row">
                     {blueSlots.map((item) => (
                       <article key={item.slot} className="slot-card slot-top-row">
@@ -78,10 +94,22 @@ export default function Matches({ savedComps, setSavedComps }) {
                   </div>
                 </div>
 
+                {/* RED TEAM */}
                 <div className="team-column red-team">
                   <div className="team-header">
                     <span>RED TEAM {match.firstPickTeam === TEAM_RED && '(FP)'}</span>
                   </div>
+
+                  {/* Seção de Bans do Time Vermelho */}
+                  {redBans.length > 0 && (
+                    <div style={{ display: 'flex', gap: '8px', padding: '8px', background: 'rgba(0,0,0,0.2)', borderRadius: '8px', marginBottom: '12px', alignItems: 'center' }}>
+                      <span style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: 'bold' }}>BANS:</span>
+                      {redBans.map((ban, idx) => (
+                        ban ? <img key={`red-ban-${idx}`} src={getBrawlerImage(ban)} alt={ban} title={ban} style={{ width: '28px', height: '28px', borderRadius: '50%', border: '1px solid #ef4444', objectFit: 'cover' }} /> : null
+                      ))}
+                    </div>
+                  )}
+
                   <div className="slot-row">
                     {redSlots.map((item) => (
                       <article key={item.slot} className="slot-card slot-top-row">
