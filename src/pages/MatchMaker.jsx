@@ -82,7 +82,7 @@ function MatchMaker({ savedComps, setSavedComps }) {
     setSlots(Array(6).fill(""));
     setBanSlots(Array(6).fill(""));
     setNotes("");
-    setShowToast("Partida registrada com sucesso!");
+    setShowToast("Match successfully registered!");
   };
 
   useEffect(() => {
@@ -185,7 +185,7 @@ function MatchMaker({ savedComps, setSavedComps }) {
       <section className="actions-card">
         {showToast && <span className="toast-message toast-success">{showToast}</span>}
         <button className="save-draft-btn" disabled={!canSave} onClick={registerMatch}>
-          Registrar Partida
+          Register Match
         </button>
       </section>
     </main>

@@ -12,10 +12,10 @@ export default function Matches({ savedComps, setSavedComps }) {
   return (
     <main className="app-shell matches-main">
       <div className="map-mode-group-title" style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>
-        Histórico de Partidas
+        Match History
       </div>
       <p style={{ color: '#fff', textShadow: '1px 1px 2px #000', marginBottom: '2rem' }}>
-        Visualize os detalhes e defina os resultados das partidas para gerar estatísticas.
+        View details and set match results to generate statistics.
       </p>
       
       <div className="notes-list">
@@ -32,11 +32,11 @@ export default function Matches({ savedComps, setSavedComps }) {
                     {match.mapMode.map} - {match.mapMode.mode}
                   </h4>
                   <p style={{ color: '#cbd5e1', margin: '0.5rem 0', fontStyle: 'italic' }}>
-                    <strong>Notas: </strong> {match.notes ? match.notes : "Sem notas."}
+                    <strong>Notes: </strong> {match.notes ? match.notes : "No notes."}
                   </p>
                   <p style={{ color: '#94a3b8', margin: 0, fontSize: '0.9rem' }}>
-                    <strong>Data:</strong> {dateStr} | <strong>Status:</strong> {
-                      match.result === 'win' ? '🟢 Vitória' : match.result === 'loss' ? '🔴 Derrota' : '⚪ Pendente'
+                    <strong>Date:</strong> {dateStr} | <strong>Status:</strong> {
+                      match.result === 'win' ? '🟢 Win' : match.result === 'loss' ? '🔴 Loss' : '⚪ Pending'
                     }
                   </p>
                 </div>
@@ -46,14 +46,14 @@ export default function Matches({ savedComps, setSavedComps }) {
                     className="btn-win" 
                     onClick={() => registerResult(match.id, 'win')}
                   >
-                    {match.result === 'win' ? 'Vitória Salva' : 'Marcar Vitória'}
+                    {match.result === 'win' ? 'Win Saved' : 'Mark Win'}
                   </button>
                   <button 
                     style={{ opacity: match.result === 'win' ? 0.5 : 1 }} 
                     className="btn-loss" 
                     onClick={() => registerResult(match.id, 'loss')}
                   >
-                    {match.result === 'loss' ? 'Derrota Salva' : 'Marcar Derrota'}
+                    {match.result === 'loss' ? 'Loss Saved' : 'Mark Loss'}
                   </button>
                 </div>
               </div>
@@ -61,7 +61,7 @@ export default function Matches({ savedComps, setSavedComps }) {
               <div className="pick-grid">
                 <div className="team-column blue-team">
                   <div className="team-header">
-                    <span>TIME AZUL {match.firstPickTeam === TEAM_BLUE && '(FP)'}</span>
+                    <span>BLUE TEAM {match.firstPickTeam === TEAM_BLUE && '(FP)'}</span>
                   </div>
                   <div className="slot-row">
                     {blueSlots.map((item) => (
@@ -80,7 +80,7 @@ export default function Matches({ savedComps, setSavedComps }) {
 
                 <div className="team-column red-team">
                   <div className="team-header">
-                    <span>TIME VERMELHO {match.firstPickTeam === TEAM_RED && '(FP)'}</span>
+                    <span>RED TEAM {match.firstPickTeam === TEAM_RED && '(FP)'}</span>
                   </div>
                   <div className="slot-row">
                     {redSlots.map((item) => (
@@ -100,7 +100,7 @@ export default function Matches({ savedComps, setSavedComps }) {
             </div>
           );
         })}
-        {savedComps.length === 0 && <p className="empty-text">Nenhuma partida registrada ainda.</p>}
+        {savedComps.length === 0 && <p className="empty-text">No matches registered yet.</p>}
       </div>
     </main>
   );
