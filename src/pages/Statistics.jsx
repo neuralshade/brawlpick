@@ -6,11 +6,9 @@ export default function Statistics({ savedComps, setSavedComps }) {
   const [showToast, setShowToast] = useState('');
   const fileInputRef = useRef(null);
 
-  // Filtros
   const [filterMap, setFilterMap] = useState('Todos');
   const [filterMode, setFilterMode] = useState('Todos');
 
-  // Filtra as partidas conforme Mapa e Modo
   const filteredComps = useMemo(() => {
     return savedComps.filter(match => {
       const matchMap = filterMap === 'Todos' || match.mapMode?.map === filterMap;
@@ -19,7 +17,6 @@ export default function Statistics({ savedComps, setSavedComps }) {
     });
   }, [savedComps, filterMap, filterMode]);
 
-  // --------- FUNÇÕES DE ARQUIVO ---------
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
     if (!file) return;
@@ -64,9 +61,6 @@ export default function Statistics({ savedComps, setSavedComps }) {
     setShowToast("Arquivo JSON exportado com sucesso!");
   };
 
-  // --------- CÁLCULO DE ESTATÍSTICAS ---------
-  
-  // Taxa de Pick Geral
   const pickStats = useMemo(() => {
     const counts = {};
     filteredComps.forEach(match => {
@@ -79,7 +73,6 @@ export default function Statistics({ savedComps, setSavedComps }) {
     return Object.entries(counts).sort((a, b) => b[1] - a[1]);
   }, [filteredComps]);
 
-  // Taxa de Banimento (Ban Rate)
   const banStats = useMemo(() => {
     const counts = {};
     let totalMatches = filteredComps.length;
@@ -96,7 +89,6 @@ export default function Statistics({ savedComps, setSavedComps }) {
       .sort((a, b) => b.count - a.count);
   }, [filteredComps]);
 
-  // Taxa de Vitória (Win Rate)
   const winRateStats = useMemo(() => {
     const stats = {};
     filteredComps.forEach(match => {
