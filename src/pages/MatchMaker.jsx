@@ -102,6 +102,37 @@ function MatchMaker({ savedComps, setSavedComps }) {
     filteredBrawlers, selectedHeroes, toggleSlot, setSearchTerm, handleSlotChange
   };
 
+  const draftSuggestions = useMemo(() => {
+    if (!savedComps || savedComps.length === 0) return [];
+
+    // Filtra partidas concluídas do mapa atual
+    const mapMatches = savedComps.filter(m => m.mapMode.map === selectedMapMode.map && (m.result === 'win' || m.result === 'loss'));
+    
+    const stats = {};
+    mapMatches.forEach(m => {
+      const blueWon = m.result === 'win';
+      // Analisa o desempenho APENAS do time azul no histórico
+      const blueHeroes = m.slots.slice(3, 6).map(s => s.hero).filter(Boolean);
+      
+      blueHeroes.forEach(hero => {
+        if (!stats[hero]) stats[hero] = { wins: 0, played: 0 };
+        stats[hero].played++;
+        if (blueWon) stats[hero].wins++;
+      });
+    });
+
+    // Calcula WR, filtra os já escolhidos/banidos, e ordena
+    return Object.entries(stats)
+      .map(([hero, data]) => ({ 
+        hero, 
+        wr: ((data.wins / data.played) * 100).toFixed(1), 
+        played: data.played 
+      }))
+      .filter(s => !selectedHeroes.has(s.hero) && s.played >= 1) // Remove brawlers já draftados
+      .sort((a, b) => b.wr - a.wr || b.played - a.played)
+      .slice(0, 5); // Top 5 sugestões
+  }, [savedComps, selectedMapMode, selectedHeroes]);
+
   return (
     <main className="app-shell">
       <div className="fp-top fp-top-centered">
