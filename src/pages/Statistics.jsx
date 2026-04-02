@@ -12,11 +12,23 @@ export default function Statistics({ savedComps, setSavedComps }) {
     
     reader.onload = (e) => {
       try {
-        const json = JSON.parse(e.target.result);
-        setSavedComps(json);
+        const rawData = JSON.parse(e.target.result);
+        
+        // Formatação/Normalização dos dados recebidos
+        const dataArray = Array.isArray(rawData) ? rawData : [rawData];
+        
+        const formattedData = dataArray.map(comp => ({
+          id: comp.id || Date.now() + Math.random(),
+          firstPickTeam: comp.firstPickTeam || 'TEAM_RED',
+          mapMode: comp.mapMode || { map: 'Desconhecido', mode: 'Desconhecido' },
+          slots: Array.isArray(comp.slots) ? comp.slots : [],
+          stats: comp.stats || { matchesPlayed: 0, wins: 0, losses: 0, winRate: 0 }
+        }));
+
+        setSavedComps(formattedData);
         setError('');
       } catch (err) {
-        setError('Erro ao processar o arquivo JSON. Verifique se o formato está correto.');
+        setError('Erro ao processar o arquivo JSON. Verifique se o formato é válido.');
       }
     };
 

@@ -60,10 +60,11 @@ function MatchMaker({ savedComps, setSavedComps }) {
         firstPickTeam,
         mapMode: selectedMapMode,
         slots: slots.map((hero, index) => ({
-          slot: slotLabels[index],
+          slot: slotLabels[index] || `Slot ${index + 1}`,
           hero,
-          order: orderLabels[index],
+          order: orderLabels[index] || `Pick ${index + 1}`,
         })),
+        stats: { matchesPlayed: 0, wins: 0, losses: 0, winRate: 0 } 
       },
       ...prev,
     ]);
@@ -79,11 +80,24 @@ function MatchMaker({ savedComps, setSavedComps }) {
     const reader = new FileReader();
     reader.onload = (e) => {
       try {
-        const json = JSON.parse(e.target.result);
-        setSavedComps(json);
-        setShowToast(`Arquivo carregado: ${json.length} comps`);
+        const rawData = JSON.parse(e.target.result);
+        
+        // Formatação/Normalização: Garante que seja um array e que todos os itens tenham a estrutura correta
+        const dataArray = Array.isArray(rawData) ? rawData : [rawData];
+        
+        const formattedData = dataArray.map(comp => ({
+          id: comp.id || Date.now() + Math.random(), // Garante um ID
+          firstPickTeam: comp.firstPickTeam || 'TEAM_RED',
+          mapMode: comp.mapMode || { map: 'Desconhecido', mode: 'Desconhecido' },
+          slots: Array.isArray(comp.slots) ? comp.slots : [],
+          // Se o JSON antigo não tiver stats, ele formata inserindo o padrão numérico
+          stats: comp.stats || { matchesPlayed: 0, wins: 0, losses: 0, winRate: 0 }
+        }));
+
+        setSavedComps(formattedData);
+        setShowToast(`Arquivo formatado e carregado: ${formattedData.length} comps`);
       } catch (err) {
-        alert('Erro ao processar o arquivo JSON.');
+        alert('Erro ao processar o arquivo JSON. O formato é inválido.');
       }
     };
     reader.readAsText(file);
