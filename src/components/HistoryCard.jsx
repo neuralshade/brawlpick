@@ -14,9 +14,9 @@ export default function HistoryCard({ savedComps }) {
           
           return (
             <article key={comp.id} className="saved-item">
-              <div style={{ marginBottom: "1rem", paddingBottom: "0.75rem", borderBottom: "1px solid #cbd5e1" }}>
-                <span style={{ color: "#0f172a" }}>{comp.mapMode.map}</span>
-                <span style={{ color: "#64748b", marginLeft: "0.5rem", fontSize: "0.9rem" }}>
+              <div className="history-comp-header">
+                <span className="history-comp-map">{comp.mapMode.map}</span>
+                <span className="history-comp-mode">
                   · {comp.mapMode.mode}
                 </span>
               </div>

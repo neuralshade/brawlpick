@@ -136,126 +136,126 @@ export default function Statistics({ savedComps, setSavedComps }) {
   const uniqueMaps = ['Todos', ...new Set(MAP_MODE_OPTIONS.map(m => m.map))];
 
   return (
-    <main className="app-shell" style={{ paddingBottom: '50px' }}>
+    <main className="app-shell stats-main">
       
       {/* CABEÇALHO E CONTROLES DE ARQUIVO */}
-      <section className="map-mode-card" style={{ marginBottom: '20px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap' }}>
+      <section className="map-mode-card stats-header-card">
+        <div className="stats-header-content">
           <div>
-            <h1 style={{ color: '#fff', margin: 0 }}>📊 Dashboard Estatístico</h1>
-            <p style={{ color: '#cbd5e1', fontSize: '0.9rem', margin: '5px 0' }}>Base Total: <b>{savedComps?.length || 0}</b> registros.</p>
+            <h1 className="stats-title">📊 Dashboard Estatístico</h1>
+            <p className="stats-subtitle">Base Total: <b>{savedComps?.length || 0}</b> registros.</p>
           </div>
           
-          <div style={{ display: 'flex', gap: '10px' }}>
-            <input type="file" accept=".json" style={{ display: 'none' }} ref={fileInputRef} onChange={handleFileUpload} />
-            <button onClick={() => fileInputRef.current.click()} style={{ background: '#3b82f6', border: 'none', padding: '10px 16px', borderRadius: '8px', color: '#fff', cursor: 'pointer', fontWeight: 'bold' }}>
+          <div className="stats-actions">
+            <input type="file" accept=".json" className="hidden-input" ref={fileInputRef} onChange={handleFileUpload} />
+            <button className="btn-open" onClick={() => fileInputRef.current.click()}>
               📂 Abrir JSON
             </button>
-            <button onClick={exportDatabase} style={{ background: '#10b981', border: 'none', padding: '10px 16px', borderRadius: '8px', color: '#fff', cursor: 'pointer', fontWeight: 'bold' }}>
+            <button className="btn-save" onClick={exportDatabase}>
               💾 Salvar JSON
             </button>
           </div>
         </div>
-        {showToast && <div style={{ color: '#10b981', marginTop: '10px', fontWeight: 'bold' }}>{showToast}</div>}
-        {error && <div style={{ color: '#f87171', marginTop: '10px', fontWeight: 'bold' }}>{error}</div>}
+        {showToast && <div className="toast-message toast-success" style={{marginTop: '10px'}}>{showToast}</div>}
+        {error && <div className="stats-toast-error">{error}</div>}
       </section>
 
       {/* FILTROS */}
-      <section style={{ background: '#1a1a2e', padding: '15px', borderRadius: '8px', marginBottom: '20px', border: '1px solid #444' }}>
-        <h3 style={{ color: '#fff', marginTop: 0 }}>Filtros de Análise</h3>
-        <div style={{ display: 'flex', gap: '20px' }}>
-          <div style={{ flex: 1 }}>
-            <label style={{ color: '#aaa', display: 'block', marginBottom: '5px' }}>Filtrar por Modo:</label>
-            <select value={filterMode} onChange={(e) => { setFilterMode(e.target.value); setFilterMap('Todos'); }} style={{ width: '100%', padding: '8px', background: '#222', color: '#fff', borderRadius: '4px' }}>
+      <section className="filters-section">
+        <h3 className="filters-title">Filtros de Análise</h3>
+        <div className="filters-grid">
+          <div className="filter-group">
+            <label className="filter-label">Filtrar por Modo:</label>
+            <select className="filter-select" value={filterMode} onChange={(e) => { setFilterMode(e.target.value); setFilterMap('Todos'); }}>
               {uniqueModes.map(m => <option key={m} value={m}>{m}</option>)}
             </select>
           </div>
-          <div style={{ flex: 1 }}>
-            <label style={{ color: '#aaa', display: 'block', marginBottom: '5px' }}>Filtrar por Mapa:</label>
-            <select value={filterMap} onChange={(e) => setFilterMap(e.target.value)} style={{ width: '100%', padding: '8px', background: '#222', color: '#fff', borderRadius: '4px' }}>
+          <div className="filter-group">
+            <label className="filter-label">Filtrar por Mapa:</label>
+            <select className="filter-select" value={filterMap} onChange={(e) => setFilterMap(e.target.value)}>
               {uniqueMaps.map(m => <option key={m} value={m}>{m}</option>)}
             </select>
           </div>
         </div>
-        <p style={{ color: '#10b981', fontSize: '0.9rem', marginTop: '10px' }}>Exibindo <b>{filteredComps.length}</b> drafts que correspondem ao filtro.</p>
+        <p className="filter-result-text">Exibindo <b>{filteredComps.length}</b> drafts que correspondem ao filtro.</p>
       </section>
 
       {/* PAINÉIS DE ESTATÍSTICAS */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
+      <div className="stats-panels-grid">
         
         {/* PANEL: MAIS BANIDOS */}
-        <div style={{ background: '#2d0a0a', padding: '15px', borderRadius: '8px', border: '1px solid #ef4444' }}>
-          <h3 style={{ color: '#ef4444', marginTop: 0 }}>🚫 Taxa de Banimento (Ban Rate)</h3>
+        <div className="stats-panel panel-bans">
+          <h3 className="panel-title title-bans">Taxa de Banimento (Ban Rate)</h3>
           {banStats.length > 0 ? (
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, color: '#fff' }}>
+            <ul className="stats-list">
               {banStats.map((b, i) => (
-                <li key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #444' }}>
+                <li key={i} className="stats-list-item">
                   <span>{b.name}</span>
-                  <strong>{b.rate}% <span style={{fontSize: '0.8rem', color: '#aaa'}}>({b.count} bans)</span></strong>
+                  <strong>{b.rate}% <span className="stats-list-subvalue">({b.count} bans)</span></strong>
                 </li>
               ))}
             </ul>
-          ) : <p style={{ color: '#aaa' }}>Sem dados de ban para este filtro.</p>}
+          ) : <p className="empty-text">Sem dados de ban para este filtro.</p>}
         </div>
 
         {/* PANEL: MAIS ESCOLHIDOS */}
-        <div style={{ background: '#0a1a2d', padding: '15px', borderRadius: '8px', border: '1px solid #3b82f6' }}>
-          <h3 style={{ color: '#3b82f6', marginTop: 0 }}>✅ Mais Escolhidos (Pick Rate)</h3>
+        <div className="stats-panel panel-picks">
+          <h3 className="panel-title title-picks">Mais Escolhidos (Pick Rate)</h3>
           {pickStats.length > 0 ? (
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, color: '#fff' }}>
+            <ul className="stats-list">
               {pickStats.slice(0, 10).map(([name, count], i) => (
-                <li key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #444' }}>
+                <li key={i} className="stats-list-item">
                   <span>{name}</span>
                   <strong>{count} picks</strong>
                 </li>
               ))}
             </ul>
-          ) : <p style={{ color: '#aaa' }}>Sem dados de pick para este filtro.</p>}
+          ) : <p className="empty-text">Sem dados de pick para este filtro.</p>}
         </div>
 
         {/* PANEL: WIN RATE */}
-        <div style={{ background: '#0a2d1a', padding: '15px', borderRadius: '8px', border: '1px solid #10b981' }}>
-          <h3 style={{ color: '#10b981', marginTop: 0 }}>🏆 Win Rate por Brawler</h3>
-          <p style={{ fontSize: '0.8rem', color: '#aaa', marginTop: '-10px' }}>(Apenas Brawlers com partidas jogadas)</p>
+        <div className="stats-panel panel-winrate">
+          <h3 className="panel-title title-winrate">Win Rate por Brawler</h3>
+          <span className="panel-subtitle">(Apenas Brawlers com partidas jogadas)</span>
           {winRateStats.length > 0 ? (
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, color: '#fff' }}>
+            <ul className="stats-list">
               {winRateStats.map((b, i) => (
-                <li key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #444' }}>
+                <li key={i} className="stats-list-item">
                   <span>{b.name}</span>
-                  <strong>{b.winRate}% <span style={{fontSize: '0.8rem', color: '#aaa'}}>({b.played} jogos)</span></strong>
+                  <strong>{b.winRate}% <span className="stats-list-subvalue">({b.played} jogos)</span></strong>
                 </li>
               ))}
             </ul>
-          ) : <p style={{ color: '#aaa' }}>Nenhuma partida jogada neste mapa ainda.</p>}
+          ) : <p className="empty-text">Nenhuma partida jogada neste mapa ainda.</p>}
         </div>
       </div>
 
       {/* ÁREA DE REGISTRO E ANOTAÇÕES */}
-      <section style={{ marginTop: '30px' }}>
-        <h2 style={{ color: '#fff' }}>📝 Anotações e Alimentação de Dados</h2>
-        <p style={{ color: '#aaa', fontSize: '0.9rem' }}>Abaixo estão as composições deste filtro. Registre vitórias ou derrotas para calcular o Win Rate real!</p>
+      <section className="notes-feed-section">
+        <h2 className="notes-feed-title">📝 Anotações e Alimentação de Dados</h2>
+        <p className="notes-feed-subtitle">Abaixo estão as composições deste filtro. Registre vitórias ou derrotas para calcular o Win Rate real!</p>
         
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+        <div className="notes-list">
           {filteredComps.map((comp, idx) => (
-            <div key={comp.id} style={{ background: '#222', padding: '15px', borderRadius: '8px', borderLeft: '4px solid #f59e0b' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+            <div key={comp.id} className="note-card">
+              <div className="note-header">
                 <div>
-                  <h4 style={{ margin: '0 0 5px 0', color: '#f59e0b' }}>{comp.mapMode.map} - {comp.mapMode.mode}</h4>
-                  <p style={{ margin: 0, color: '#ddd', fontSize: '0.9rem', fontStyle: 'italic' }}>
+                  <h4 className="note-map-title">{comp.mapMode.map} - {comp.mapMode.mode}</h4>
+                  <p className="note-text">
                     <strong>Anotação do Draft: </strong> {comp.notes ? comp.notes : "Sem anotações registradas."}
                   </p>
-                  <p style={{ margin: '5px 0 0 0', color: '#aaa', fontSize: '0.8rem' }}>
+                  <p className="note-stats">
                     Jogos: {comp.stats.matchesPlayed} | Vitórias: {comp.stats.wins} | Derrotas: {comp.stats.losses}
                   </p>
                 </div>
-                <div style={{ display: 'flex', gap: '10px' }}>
-                  <button onClick={() => registerResult(idx, 'win')} style={{ background: '#10b981', color: 'white', border: 'none', padding: '5px 10px', borderRadius: '4px', cursor: 'pointer' }}>+ Vitória</button>
-                  <button onClick={() => registerResult(idx, 'loss')} style={{ background: '#ef4444', color: 'white', border: 'none', padding: '5px 10px', borderRadius: '4px', cursor: 'pointer' }}>+ Derrota</button>
+                <div className="note-actions">
+                  <button className="btn-win" onClick={() => registerResult(idx, 'win')}>+ Vitória</button>
+                  <button className="btn-loss" onClick={() => registerResult(idx, 'loss')}>+ Derrota</button>
                 </div>
               </div>
             </div>
           ))}
-          {filteredComps.length === 0 && <p style={{ color: '#aaa' }}>Nenhuma comp para avaliar.</p>}
+          {filteredComps.length === 0 && <p className="empty-text">Nenhuma comp para avaliar.</p>}
         </div>
       </section>
 

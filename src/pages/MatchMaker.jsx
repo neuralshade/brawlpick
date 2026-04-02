@@ -104,7 +104,7 @@ function MatchMaker({ savedComps, setSavedComps }) {
 
   return (
     <main className="app-shell">
-      <div className="fp-top" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <div className="fp-top fp-top-centered">
         <div className="slider-control fp-alone">
           <div className="slider-label">First Pick</div>
           <button
@@ -127,18 +127,18 @@ function MatchMaker({ savedComps, setSavedComps }) {
       />
 
       {/* --- BAN PHASE --- */}
-      <section className="pick-grid" style={{ marginBottom: '1.5rem' }}>
+      <section className="pick-grid ban-section">
         <div className="team-column blue-team">
           <div className="team-header">
             <span>BLUE TEAM BANS</span>
           </div>
-          <div className="slot-row" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))' }}>
+          <div className="slot-row ban-slot-row">
             {[3, 4, 5].map(idx => (
-              <article key={`blue-ban-${idx}`} className="slot-card" style={{ padding: '1rem' }}>
+              <article key={`blue-ban-${idx}`} className="slot-card ban-slot-card">
                 <select 
+                  className="ban-select"
                   value={banSlots[idx]} 
                   onChange={(e) => handleBanChange(idx, e.target.value)} 
-                  style={{ width: '100%', padding: '0.75rem', background: '#fff', color: '#0f172a', border: '1px solid #cbd5e1', borderRadius: '0.5rem', fontFamily: 'inherit', fontSize: '0.95rem' }}
                 >
                   <option value="">Ban...</option>
                   {BRAWLERS.map(b => <option key={b} value={b} disabled={selectedHeroes.has(b) && banSlots[idx] !== b}>{b}</option>)}
@@ -152,13 +152,13 @@ function MatchMaker({ savedComps, setSavedComps }) {
           <div className="team-header">
             <span>RED TEAM BANS</span>
           </div>
-          <div className="slot-row" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))' }}>
+          <div className="slot-row ban-slot-row">
             {[0, 1, 2].map(idx => (
-              <article key={`red-ban-${idx}`} className="slot-card" style={{ padding: '1rem' }}>
+              <article key={`red-ban-${idx}`} className="slot-card ban-slot-card">
                 <select 
+                  className="ban-select"
                   value={banSlots[idx]} 
                   onChange={(e) => handleBanChange(idx, e.target.value)} 
-                  style={{ width: '100%', padding: '0.75rem', background: '#fff', color: '#0f172a', border: '1px solid #cbd5e1', borderRadius: '0.5rem', fontFamily: 'inherit', fontSize: '0.95rem' }}
                 >
                   <option value="">Ban...</option>
                   {BRAWLERS.map(b => <option key={b} value={b} disabled={selectedHeroes.has(b) && banSlots[idx] !== b}>{b}</option>)}
@@ -176,18 +176,18 @@ function MatchMaker({ savedComps, setSavedComps }) {
       </section>
 
       {/* --- DRAFT NOTES --- */}
-      <section className="map-mode-card" style={{ marginBottom: '1.5rem', padding: '1.25rem' }}>
+      <section className="map-mode-card notes-section">
         <textarea 
+          className="notes-textarea"
           placeholder="Strategic notes for this map/draft (e.g., Rotate through the left bush, focus on mid control...)"
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
-          style={{ width: '100%', padding: '12px', background: '#fff', color: '#0f172a', border: '2px solid #000', borderRadius: '0', minHeight: '80px', fontFamily: 'inherit', fontSize: '1rem' }}
         />
       </section>
 
       <section className="actions-card">
-        {showToast && <span className="toast-message" style={{ color: '#10b981', fontWeight: 'bold' }}>{showToast}</span>}
-        <button disabled={!canSave} onClick={saveComposition} style={{ opacity: canSave ? 1 : 0.5, cursor: canSave ? 'pointer' : 'not-allowed', width: '100%', padding: '15px', fontSize: '1.2rem', marginTop: '10px' }}>
+        {showToast && <span className="toast-message toast-success">{showToast}</span>}
+        <button className="save-draft-btn" disabled={!canSave} onClick={saveComposition}>
           Save Draft
         </button>
       </section>

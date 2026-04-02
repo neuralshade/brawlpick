@@ -20,7 +20,7 @@ body {
     background-color: #0049c4;
 }
 
-button, select, input {
+button, select, input, textarea {
     font: inherit;
 }
 
@@ -472,12 +472,362 @@ button, select, input {
 .saved-team.red-team h3 { color: #b91c1c; }
 .saved-team.blue-team h3 { color: #1d4ed8; }
 
+/* =========================================
+   NOVAS CLASSES - REFATORAÇÃO INLINE STYLES
+   ========================================= */
+
+/* Navegação Principal (App.jsx) */
+.main-navbar {
+    display: flex;
+    gap: 30px;
+    padding: 15px 30px;
+    background: rgba(0, 0, 0, 0.25);
+    border-bottom: 2px solid #000;
+    box-shadow: 0 24px 40px rgba(15, 23, 42, 0.06);
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 18px;
+    text-shadow: 0 0 2px #000, 0 0 4px #000, 1px 1px 0 #000, -1px -1px 0 #000, 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+/* HistoryCard.jsx */
+.history-comp-header {
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #cbd5e1;
+}
+
+.history-comp-map {
+    color: #0f172a;
+}
+
+.history-comp-mode {
+    color: #64748b;
+    margin-left: 0.5rem;
+    font-size: 0.9rem;
+}
+
+/* MatchMaker.jsx Extras */
+.fp-top-centered {
+    justify-content: center;
+    align-items: center;
+}
+
+.ban-section {
+    margin-bottom: 1.5rem;
+}
+
+.ban-slot-row {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+}
+
+.ban-slot-card {
+    padding: 1rem;
+}
+
+.ban-select {
+    width: 100%;
+    padding: 0.75rem;
+    background: #fff;
+    color: #0f172a;
+    border: 1px solid #cbd5e1;
+    border-radius: 0.5rem;
+    font-family: inherit;
+    font-size: 0.95rem;
+}
+
+.notes-section {
+    margin-bottom: 1.5rem;
+    padding: 1.25rem;
+}
+
+.notes-textarea {
+    width: 100%;
+    padding: 12px;
+    background: #fff;
+    color: #0f172a;
+    border: 2px solid #000;
+    border-radius: 0;
+    min-height: 80px;
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+.toast-success {
+    color: #10b981;
+    font-weight: bold;
+}
+
+.save-draft-btn {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.2rem;
+    margin-top: 10px;
+}
+
+/* Statistics.jsx */
+.hidden-input {
+    display: none;
+}
+
+.stats-main {
+    padding-bottom: 50px;
+}
+
+.stats-header-card {
+    margin-bottom: 20px;
+}
+
+.stats-header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.stats-title {
+    color: #fff;
+    margin: 0;
+}
+
+.stats-subtitle {
+    color: #cbd5e1;
+    font-size: 0.9rem;
+    margin: 5px 0;
+}
+
+.stats-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-open {
+    background: #3b82f6;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    color: #fff;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-save {
+    background: #10b981;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    color: #fff;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.stats-toast-error {
+    color: #f87171;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.filters-section {
+    background: #1a1a2e;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid #444;
+}
+
+.filters-title {
+    color: #fff;
+    margin-top: 0;
+}
+
+.filters-grid {
+    display: flex;
+    gap: 20px;
+}
+
+.filter-group {
+    flex: 1;
+}
+
+.filter-label {
+    color: #aaa;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.filter-select {
+    width: 100%;
+    padding: 8px;
+    background: #222;
+    color: #fff;
+    border-radius: 4px;
+    border: 1px solid #444;
+}
+
+.filter-result-text {
+    color: #10b981;
+    font-size: 0.9rem;
+    margin-top: 10px;
+}
+
+.stats-panels-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.stats-panel {
+    padding: 15px;
+}
+
+.panel-bans {
+    background: #2d0a0a;
+    border: 1px solid #ef4444;
+}
+
+.panel-picks {
+    background: #0a1a2d;
+    border: 1px solid #3b82f6;
+}
+
+.panel-winrate {
+    background: #0a2d1a;
+    border: 1px solid #10b981;
+}
+
+.panel-title {
+    margin-top: 0;
+}
+
+.title-bans {
+    color: #ef4444;
+}
+
+.title-picks {
+    color: #3b82f6;
+}
+
+.title-winrate {
+    color: #10b981;
+}
+
+.panel-subtitle {
+    font-size: 0.8rem;
+    color: #aaa;
+    margin-top: -10px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.stats-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    color: #fff;
+}
+
+.stats-list-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #444;
+}
+
+.stats-list-subvalue {
+    font-size: 0.8rem;
+    color: #aaa;
+}
+
+.empty-text {
+    color: #aaa;
+}
+
+.notes-feed-section {
+    margin-top: 30px;
+}
+
+.notes-feed-title {
+    color: #fff;
+}
+
+.notes-feed-subtitle {
+    color: #aaa;
+    font-size: 0.9rem;
+}
+
+.notes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.note-card {
+    background: #222;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #f59e0b;
+}
+
+.note-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.note-map-title {
+    margin: 0 0 5px 0;
+    color: #f59e0b;
+}
+
+.note-text {
+    margin: 0;
+    color: #ddd;
+    font-size: 0.9rem;
+    font-style: italic;
+}
+
+.note-stats {
+    margin: 5px 0 0 0;
+    color: #aaa;
+    font-size: 0.8rem;
+}
+
+.note-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-win {
+    background: #10b981;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-loss {
+    background: #ef4444;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Responsividade Mobile (Adições) */
 @media (max-width: 800px) {
     .pick-grid {
         grid-template-columns: 1fr;
     }
     .slot-row {
         justify-content: stretch;
+    }
+    .filters-grid {
+        flex-direction: column;
     }
 }
 
@@ -488,5 +838,10 @@ button, select, input {
     }
     .actions-card {
         justify-content: space-between;
+    }
+    .stats-header-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
     }
 }
