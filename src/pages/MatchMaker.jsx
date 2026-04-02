@@ -188,7 +188,7 @@ function MatchMaker({ savedComps, setSavedComps }) {
       <section className="actions-card">
         {showToast && <span className="toast-message" style={{ color: '#10b981', fontWeight: 'bold' }}>{showToast}</span>}
         <button disabled={!canSave} onClick={saveComposition} style={{ opacity: canSave ? 1 : 0.5, cursor: canSave ? 'pointer' : 'not-allowed', width: '100%', padding: '15px', fontSize: '1.2rem', marginTop: '10px' }}>
-          Save Draft to Memory
+          Save Draft
         </button>
       </section>
 
