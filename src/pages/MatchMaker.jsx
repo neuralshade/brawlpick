@@ -2,12 +2,11 @@ import { useMemo, useState, useEffect } from "react";
 import { TEAM_RED, TEAM_BLUE, MAP_MODE_OPTIONS, BRAWLERS, slotLabels } from "../constants";
 import MapSelector from "../components/MapSelector";
 import TeamColumn from "../components/TeamColumn";
-import HistoryCard from "../components/HistoryCard";
 
 function MatchMaker({ savedComps, setSavedComps }) {
   const [firstPickTeam, setFirstPickTeam] = useState(TEAM_RED);
   const [slots, setSlots] = useState(Array(6).fill(""));
-  const [banSlots, setBanSlots] = useState(Array(6).fill("")); // 0-2: Red Bans, 3-5: Blue Bans
+  const [banSlots, setBanSlots] = useState(Array(6).fill(""));
   const [activeSlot, setActiveSlot] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedMapMode, setSelectedMapMode] = useState(MAP_MODE_OPTIONS[0]);
@@ -57,12 +56,12 @@ function MatchMaker({ savedComps, setSavedComps }) {
 
   const canSave = slots.every(Boolean) && banSlots.every(Boolean);
 
-  const saveComposition = () => {
+  const registerMatch = () => {
     if (!canSave) return;
     setSavedComps((prev) => [
       {
         id: Date.now(),
-        date: new Date().toISOString(), // Adiciona a data da partida
+        date: new Date().toISOString(),
         firstPickTeam,
         mapMode: selectedMapMode,
         notes: notes,
@@ -75,7 +74,7 @@ function MatchMaker({ savedComps, setSavedComps }) {
           hero,
           order: orderLabels[index] || `Pick ${index + 1}`,
         })),
-        result: null // O resultado inicia como nulo/pendente
+        result: null
       },
       ...prev,
     ]);
@@ -83,7 +82,7 @@ function MatchMaker({ savedComps, setSavedComps }) {
     setSlots(Array(6).fill(""));
     setBanSlots(Array(6).fill(""));
     setNotes("");
-    setShowToast("Match draft successfully saved to memory!");
+    setShowToast("Partida registrada com sucesso!");
   };
 
   useEffect(() => {
@@ -127,7 +126,6 @@ function MatchMaker({ savedComps, setSavedComps }) {
         setSelectedMapMode={setSelectedMapMode} 
       />
 
-      {/* --- BAN PHASE --- */}
       <section className="pick-grid ban-section">
         <div className="team-column blue-team">
           <div className="team-header">
@@ -169,14 +167,12 @@ function MatchMaker({ savedComps, setSavedComps }) {
           </div>
         </div>
       </section>
-      {/* --- END BAN PHASE --- */}
 
       <section className="pick-grid">
         <TeamColumn teamName="BLUE TEAM" teamClass="blue-team" glowClass="blue-glow" startIndex={3} teamSlots={slots.slice(3, 6)} {...commonTeamProps} />
         <TeamColumn teamName="RED TEAM" teamClass="red-team" glowClass="red-glow" startIndex={0} teamSlots={slots.slice(0, 3)} {...commonTeamProps} />
       </section>
 
-      {/* --- DRAFT NOTES --- */}
       <section className="map-mode-card notes-section">
         <textarea 
           className="notes-textarea"
@@ -188,12 +184,10 @@ function MatchMaker({ savedComps, setSavedComps }) {
 
       <section className="actions-card">
         {showToast && <span className="toast-message toast-success">{showToast}</span>}
-        <button className="save-draft-btn" disabled={!canSave} onClick={saveComposition}>
-          Save Draft
+        <button className="save-draft-btn" disabled={!canSave} onClick={registerMatch}>
+          Registrar Partida
         </button>
       </section>
-
-      <HistoryCard savedComps={savedComps} />
     </main>
   );
 }

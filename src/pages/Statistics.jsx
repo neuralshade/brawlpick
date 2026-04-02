@@ -125,8 +125,12 @@ export default function Statistics({ savedComps, setSavedComps }) {
       <section className="map-mode-card stats-header-card">
         <div className="stats-header-content">
           <div>
-            <h1 className="stats-title">Dashboard Estatístico</h1>
-            <p className="stats-subtitle">Base Total: <b>{savedComps?.length || 0}</b> partidas.</p>
+            <h1 className="stats-title map-mode-group-title" style={{ fontSize: '1.5rem', margin: 0 }}>
+              Dashboard Estatístico
+            </h1>
+            <p className="stats-subtitle" style={{ color: '#fff', textShadow: '1px 1px 2px #000' }}>
+              Base Total: <b>{savedComps?.length || 0}</b> partidas.
+            </p>
           </div>
           
           <div className="stats-actions">
@@ -139,28 +143,30 @@ export default function Statistics({ savedComps, setSavedComps }) {
         {error && <div className="stats-toast-error">{error}</div>}
       </section>
 
-      <section className="filters-section">
-        <h3 className="filters-title">Filtros de Análise</h3>
+      <section className="map-mode-card filters-section" style={{ background: 'rgba(0,0,0,0.4)', border: '2px solid #000' }}>
+        <h3 className="map-mode-group-title" style={{ fontSize: '1.2rem' }}>Filtros de Análise</h3>
         <div className="filters-grid">
           <div className="filter-group">
-            <label className="filter-label">Filtrar por Modo:</label>
+            <label className="filter-label" style={{ color: '#fff' }}>Filtrar por Modo:</label>
             <select className="filter-select" value={filterMode} onChange={(e) => { setFilterMode(e.target.value); setFilterMap('Todos'); }}>
               {uniqueModes.map(m => <option key={m} value={m}>{m}</option>)}
             </select>
           </div>
           <div className="filter-group">
-            <label className="filter-label">Filtrar por Mapa:</label>
+            <label className="filter-label" style={{ color: '#fff' }}>Filtrar por Mapa:</label>
             <select className="filter-select" value={filterMap} onChange={(e) => setFilterMap(e.target.value)}>
               {uniqueMaps.map(m => <option key={m} value={m}>{m}</option>)}
             </select>
           </div>
         </div>
-        <p className="filter-result-text">Exibindo <b>{filteredComps.length}</b> partidas que correspondem ao filtro.</p>
+        <p className="filter-result-text" style={{ textShadow: '1px 1px 2px #000' }}>
+          Exibindo <b>{filteredComps.length}</b> partidas que correspondem ao filtro.
+        </p>
       </section>
 
       <div className="stats-panels-grid">
-        <div className="stats-panel panel-bans">
-          <h3 className="panel-title title-bans">Taxa de Banimento (Ban Rate)</h3>
+        <div className="map-mode-card panel-bans" style={{ borderColor: '#ef4444', borderWidth: '2px' }}>
+          <h3 className="map-mode-group-title" style={{ color: '#ef4444' }}>Taxa de Banimento</h3>
           {banStats.length > 0 ? (
             <ul className="stats-list">
               {banStats.map((b, i) => (
@@ -173,8 +179,8 @@ export default function Statistics({ savedComps, setSavedComps }) {
           ) : <p className="empty-text">Sem dados de ban para este filtro.</p>}
         </div>
 
-        <div className="stats-panel panel-picks">
-          <h3 className="panel-title title-picks">Mais Escolhidos (Pick Rate)</h3>
+        <div className="map-mode-card panel-picks" style={{ borderColor: '#3b82f6', borderWidth: '2px' }}>
+          <h3 className="map-mode-group-title" style={{ color: '#3b82f6' }}>Mais Escolhidos</h3>
           {pickStats.length > 0 ? (
             <ul className="stats-list">
               {pickStats.slice(0, 10).map(([name, count], i) => (
@@ -187,9 +193,9 @@ export default function Statistics({ savedComps, setSavedComps }) {
           ) : <p className="empty-text">Sem dados de pick para este filtro.</p>}
         </div>
 
-        <div className="stats-panel panel-winrate">
-          <h3 className="panel-title title-winrate">Win Rate por Brawler</h3>
-          <span className="panel-subtitle">(Partidas com resultado definido)</span>
+        <div className="map-mode-card panel-winrate" style={{ borderColor: '#10b981', borderWidth: '2px' }}>
+          <h3 className="map-mode-group-title" style={{ color: '#10b981' }}>Win Rate</h3>
+          <span className="panel-subtitle" style={{ color: '#fff' }}>(Partidas com resultado definido)</span>
           {winRateStats.length > 0 ? (
             <ul className="stats-list">
               {winRateStats.map((b, i) => (
