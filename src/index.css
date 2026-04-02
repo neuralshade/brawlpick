@@ -1,8 +1,8 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lilita+One&display=swap");
 
 :root {
     color-scheme: light;
-    font-family: "Inter", system-ui, sans-serif;
+    font-family: "Lilita One", system-ui, sans-serif;
     background: #f8fafc;
     color: #0f172a;
 }
@@ -19,22 +19,12 @@ body,
 
 body {
     margin: 0;
-    background:
-        radial-gradient(
-            circle at top,
-            rgba(255, 255, 255, 0.9),
-            transparent 35%
-        ),
-        linear-gradient(180deg, #ffffff 0%, #e2e8f0 100%);
+    background-color: #0049c4;
 }
 
 button,
 select {
     font: inherit;
-}
-
-body {
-    line-height: 1.5;
 }
 
 .app-shell {
@@ -69,7 +59,6 @@ body {
 .map-mode-card {
     background: #ffffff;
     border: 1px solid #d1d5db;
-    border-radius: 1.25rem;
     padding: 1.25rem;
     box-shadow: 0 24px 40px rgba(15, 23, 42, 0.06);
     margin-bottom: 1.5rem;
@@ -84,7 +73,6 @@ body {
 
 .map-mode-header span {
     font-size: 1rem;
-    font-weight: 700;
 }
 
 .map-mode-header p {
@@ -96,15 +84,13 @@ body {
 .map-mode-selected {
     font-size: 0.95rem;
     color: #475569;
-    font-weight: 600;
     white-space: nowrap;
 }
 
 .map-mode-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 0.75rem;
-    margin-top: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 0.5rem;
 }
 
 .map-mode-option {
@@ -127,14 +113,26 @@ body {
     background: #eff6ff;
 }
 
-.map-mode-name {
-    font-weight: 700;
-}
-
 .map-mode-type {
     margin-top: 0.35rem;
     color: #475569;
     font-size: 0.95rem;
+}
+
+.map-groups-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem; /* Espaçamento entre os diferentes modos de jogo */
+    margin-top: 1rem;
+}
+
+.map-mode-group-title {
+    font-size: 1rem;
+    color: #64748b; /* Uma cor cinza sutil */
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 0.25rem;
 }
 
 .fp-alone {
@@ -142,7 +140,6 @@ body {
     align-items: center;
     gap: 1rem;
     padding: 0.9rem 1.2rem;
-    border-radius: 999px;
     background: #ffffff;
     border: 1px solid #cbd5e1;
     box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
@@ -156,7 +153,6 @@ body {
 
 .slider-label {
     font-size: 0.95rem;
-    font-weight: 600;
     color: #334155;
 }
 
@@ -226,7 +222,6 @@ body {
 
 .team-header span {
     font-size: 1.05rem;
-    font-weight: 700;
 }
 
 .team-header small {
@@ -305,7 +300,6 @@ body {
 
 .slot-brawler-name {
     font-size: 0.95rem;
-    font-weight: 700;
     color: #0f172a;
 }
 
@@ -326,7 +320,6 @@ body {
 }
 
 .slot-label {
-    font-weight: 700;
     color: #0f172a;
 }
 
@@ -360,12 +353,10 @@ body {
     display: grid;
     place-items: center;
     color: #64748b;
-    font-weight: 700;
 }
 
 .slot-selected {
     color: #334155;
-    font-weight: 600;
 }
 
 .choose-button {
@@ -489,7 +480,6 @@ body {
 
 .saved-team h3 {
     margin: 0 0 0.75rem;
-    font-size: 0.95rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -500,7 +490,6 @@ body {
     padding: 0.15rem 0.5rem;
     border-radius: 999px;
     font-size: 0.7rem;
-    font-weight: 700;
     color: #ffffff;
 }
 
@@ -543,7 +532,6 @@ body {
 .saved-slot-name {
     font-size: 0.95rem;
     color: #334155;
-    font-weight: 600;
 }
 
 .saved-team.red-team h3 {
