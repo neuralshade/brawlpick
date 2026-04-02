@@ -11,9 +11,7 @@
     box-sizing: border-box;
 }
 
-html,
-body,
-#root {
+html, body, #root {
     min-height: 100%;
 }
 
@@ -22,8 +20,7 @@ body {
     background-color: #0049c4;
 }
 
-button,
-select {
+button, select, input {
     font: inherit;
 }
 
@@ -31,23 +28,6 @@ select {
     max-width: 1080px;
     margin: 0 auto;
     padding: 2rem 1.5rem 3rem;
-}
-
-.hero {
-    text-align: center;
-    margin-bottom: 2rem;
-}
-
-.hero h1 {
-    margin: 0;
-    font-size: clamp(2rem, 4vw, 3rem);
-    letter-spacing: -0.04em;
-}
-
-.hero p {
-    margin: 1rem auto 0;
-    max-width: 42rem;
-    color: #475569;
 }
 
 .fp-top {
@@ -76,11 +56,6 @@ select {
     color: #fff;
 }
 
-.map-mode-header p {
-    margin: 0.35rem 0 0;
-    font-size: 0.95rem;
-}
-
 .map-mode-selected {
     font-size: 0.95rem;
     color: #fff;
@@ -100,10 +75,7 @@ select {
     background: #f8fafc;
     color: #0f172a;
     cursor: pointer;
-    transition:
-        border-color 0.2s ease,
-        background 0.2s ease,
-        transform 0.2s ease;
+    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
 }
 
 .map-mode-option:hover,
@@ -112,16 +84,10 @@ select {
     background: #eff6ff;
 }
 
-.map-mode-type {
-    margin-top: 0.35rem;
-    color: #475569;
-    font-size: 0.95rem;
-}
-
 .map-groups-container {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem; /* Espaçamento entre os diferentes modos de jogo */
+    gap: 1.5rem;
     margin-top: 1rem;
 }
 
@@ -134,12 +100,7 @@ select {
     margin-bottom: 0.75rem;
     text-transform: uppercase;
     padding-bottom: 0.25rem;
-    text-shadow:
-        0 0 2px #000,
-        0 0 4px #000,
-        1px 1px 0 #000,
-        -1px -1px 0 #000,
-        2px 2px 4px rgba(0, 0, 0, 0.7);
+    text-shadow: 0 0 2px #000, 0 0 4px #000, 1px 1px 0 #000, -1px -1px 0 #000, 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
 .mode-icon {
@@ -231,16 +192,7 @@ select {
     gap: 0.35rem;
     margin-bottom: 1rem;
     color: #fff;
-    text-shadow:
-        0 0 2px #000,
-        0 0 4px #000,
-        1px 1px 0 #000,
-        -1px -1px 0 #000,
-        2px 2px 4px rgba(0, 0, 0, 0.7);
-}
-
-.team-header span {
-    font-size: 1.05rem;
+    text-shadow: 0 0 2px #000, 0 0 4px #000, 1px 1px 0 #000, -1px -1px 0 #000, 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
 .slot-row {
@@ -251,7 +203,6 @@ select {
 
 .slot-card {
     width: 100%;
-    min-width: 0;
     padding: 1.25rem;
     border-radius: 0.95rem;
     background: #ffffff;
@@ -259,15 +210,17 @@ select {
     box-shadow: 0 24px 40px rgba(15, 23, 42, 0.06);
     display: grid;
     gap: 0.85rem;
-    min-height: 0;
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.slot-card.next-pick {
+.slot-card.blue-glow.next-pick {
     transform: translateY(-2px);
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.18);
+}
+
+.slot-card.red-glow.next-pick {
+    transform: translateY(-2px);
+    box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.18);
 }
 
 .slot-top-row {
@@ -281,65 +234,6 @@ select {
     display: flex;
     align-items: center;
     gap: 0.9rem;
-    min-width: 0;
-    flex: 0 1 auto;
-}
-
-.slot-order-block {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    min-width: 0;
-}
-
-.choose-button {
-    padding: 0.85rem 1rem;
-    border-radius: 0.95rem;
-    border: 1px solid #cbd5e1;
-    background: #ffffff;
-    color: #0f172a;
-    cursor: pointer;
-    transition:
-        background 0.2s ease,
-        border-color 0.2s ease;
-    white-space: nowrap;
-}
-
-.slot-brawler-name {
-    font-size: 0.95rem;
-    color: #0f172a;
-}
-
-.slot-card.red-glow.next-pick {
-    box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.18);
-}
-
-.slot-card .slot-order {
-    color: #64748b;
-}
-
-.slot-card .slot-selection {
-    align-items: flex-start;
-}
-
-.slot-card.red-glow.next-pick {
-    box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.18);
-}
-
-.slot-label {
-    color: #0f172a;
-}
-
-.slot-order {
-    font-size: 0.85rem;
-    color: #64748b;
-}
-
-.slot-selection {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.75rem;
 }
 
 .slot-avatar {
@@ -351,42 +245,68 @@ select {
     object-fit: cover;
 }
 
-.choose-button {
-    width: auto;
-    padding: 0.75rem 1rem;
-}
-
 .slot-avatar.empty {
     display: grid;
     place-items: center;
     color: #64748b;
 }
 
-.slot-selected {
-    color: #334155;
+.slot-order-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.slot-label {
+    color: #0f172a;
+}
+
+.slot-order {
+    font-size: 0.85rem;
+    color: #64748b;
+}
+
+.slot-brawler-name {
+    font-size: 0.95rem;
+    color: #0f172a;
 }
 
 .choose-button {
-    padding: 0.85rem 1rem;
+    padding: 0.75rem 1rem;
     border-radius: 0.95rem;
     border: 1px solid #cbd5e1;
     background: #ffffff;
     color: #0f172a;
     cursor: pointer;
-    transition:
-        background 0.2s ease,
-        border-color 0.2s ease;
+    transition: background 0.2s ease, border-color 0.2s ease;
+    white-space: nowrap;
 }
 
 .choose-button:hover:not(:disabled) {
     background: #eef2ff;
 }
 
+.picker-search {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.picker-search input {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid #cbd5e1;
+    font-size: 0.9rem;
+}
+
 .picker-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
     gap: 0.65rem;
-    margin-top: 0.85rem;
+    margin-top: 0.5rem;
+    max-height: 250px;
+    overflow-y: auto;
+    padding-right: 0.5rem;
 }
 
 .brawler-option {
@@ -398,10 +318,7 @@ select {
     background: #ffffff;
     color: #0f172a;
     cursor: pointer;
-    transition:
-        transform 0.2s ease,
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .brawler-option img {
@@ -428,6 +345,8 @@ select {
 .actions-card {
     display: flex;
     justify-content: flex-end;
+    align-items: center;
+    gap: 1rem;
     margin-bottom: 1.5rem;
 }
 
@@ -439,11 +358,27 @@ select {
     background: #2563eb;
     cursor: pointer;
     box-shadow: 0 14px 30px rgba(37, 99, 235, 0.18);
+    transition: background 0.2s;
+}
+
+.actions-card button:hover:not(:disabled) {
+    background: #1d4ed8;
 }
 
 .actions-card button:disabled {
     opacity: 0.55;
     cursor: not-allowed;
+}
+
+.toast-message {
+    color: #10b981;
+    font-size: 0.95rem;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .history-card {
@@ -500,13 +435,8 @@ select {
     color: #ffffff;
 }
 
-.saved-team-badge.red {
-    background: #dc2626;
-}
-
-.saved-team-badge.blue {
-    background: #2563eb;
-}
+.saved-team-badge.red { background: #dc2626; }
+.saved-team-badge.blue { background: #2563eb; }
 
 .saved-team ul {
     list-style: none;
@@ -541,19 +471,13 @@ select {
     color: #334155;
 }
 
-.saved-team.red-team h3 {
-    color: #b91c1c;
-}
-
-.saved-team.blue-team h3 {
-    color: #1d4ed8;
-}
+.saved-team.red-team h3 { color: #b91c1c; }
+.saved-team.blue-team h3 { color: #1d4ed8; }
 
 @media (max-width: 800px) {
     .pick-grid {
         grid-template-columns: 1fr;
     }
-
     .slot-row {
         justify-content: stretch;
     }
@@ -564,8 +488,7 @@ select {
         flex-direction: column;
         gap: 0.75rem;
     }
-
     .actions-card {
-        justify-content: center;
+        justify-content: space-between;
     }
 }
