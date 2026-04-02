@@ -11,7 +11,9 @@ export default function MapSelector({ selectedMapMode, setSelectedMapMode }) {
   return (
     <section className="map-mode-card">
       <div className="map-mode-header">
-        <div><span>MAP & MODE</span></div>
+        <div>
+          <span>MAP & MODE</span>
+        </div>
         <div className="map-mode-selected">
           {selectedMapMode.map} · {selectedMapMode.mode}
         </div>
@@ -21,7 +23,9 @@ export default function MapSelector({ selectedMapMode, setSelectedMapMode }) {
         {Object.entries(GROUPED_MAPS).map(([mode, maps]) => (
           <div key={mode} className="map-mode-group">
             <h3 className="map-mode-group-title">
-              {getModeIcon(mode) && <img src={getModeIcon(mode)} alt={mode} className="mode-icon" />}
+              {getModeIcon(mode) && (
+                <img src={getModeIcon(mode)} alt={mode} className="mode-icon" />
+              )}
               <span>{mode}</span>
             </h3>
             <div className="map-mode-grid">

@@ -3,7 +3,14 @@
 export const TEAM_RED = "red";
 export const TEAM_BLUE = "blue";
 
-export const slotLabels = ["Red 1", "Red 2", "Red 3", "Blue 1", "Blue 2", "Blue 3"];
+export const slotLabels = [
+  "Red 1",
+  "Red 2",
+  "Red 3",
+  "Blue 1",
+  "Blue 2",
+  "Blue 3",
+];
 
 export const MAP_MODE_OPTIONS = [
   { map: "Hard Rock Mine", mode: "Gem Grab" },
@@ -49,26 +56,50 @@ export const MAP_MODE_OPTIONS = [
 ];
 
 // Importação de Mapas
-const mapFiles = import.meta.glob("./assets/maps/*", { eager: true, import: "default" });
+const mapFiles = import.meta.glob("./assets/maps/*", {
+  eager: true,
+  import: "default",
+});
 const MAP_ICONS = Object.fromEntries(
   Object.entries(mapFiles).map(([path, url]) => {
-    const fileName = path.replace(/\\/g, "/").split("/").pop().replace(/\.[^/.]+$/, "");
+    const fileName = path
+      .replace(/\\/g, "/")
+      .split("/")
+      .pop()
+      .replace(/\.[^/.]+$/, "");
     return [fileName, url];
   }),
 );
 export const getModeIcon = (modeName) => MAP_ICONS[modeName.replace(/ /g, "_")];
 
 // Importação de Brawlers
-const brawlerFiles = import.meta.glob("./assets/brawlers/*", { eager: true, import: "default" });
+const brawlerFiles = import.meta.glob("./assets/brawlers/*", {
+  eager: true,
+  import: "default",
+});
 const BRAWLER_IMAGES = Object.fromEntries(
   Object.entries(brawlerFiles).map(([path, url]) => {
-    const fileName = path.replace(/\\/g, "/").split("/").pop().replace(/\.[^/.]+$/, "");
+    const fileName = path
+      .replace(/\\/g, "/")
+      .split("/")
+      .pop()
+      .replace(/\.[^/.]+$/, "");
     return [fileName, url];
   }),
 );
 
-const normalizeBrawlerName = (name) => name.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "");
-const prettyBrawlerName = (fileName) => fileName.replace(/_/g, " ").replace(/(^|\s)\S/g, (char) => char.toUpperCase());
+const normalizeBrawlerName = (name) =>
+  name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_|_$/g, "");
+const prettyBrawlerName = (fileName) =>
+  fileName
+    .replace(/_/g, " ")
+    .replace(/(^|\s)\S/g, (char) => char.toUpperCase());
 
-export const BRAWLERS = Object.keys(BRAWLER_IMAGES).sort().map(prettyBrawlerName);
-export const getBrawlerImage = (name) => BRAWLER_IMAGES[normalizeBrawlerName(name)];
+export const BRAWLERS = Object.keys(BRAWLER_IMAGES)
+  .sort()
+  .map(prettyBrawlerName);
+export const getBrawlerImage = (name) =>
+  BRAWLER_IMAGES[normalizeBrawlerName(name)];

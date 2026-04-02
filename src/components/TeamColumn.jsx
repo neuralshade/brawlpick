@@ -16,10 +16,11 @@ export default function TeamColumn({
   toggleSlot,
   setSearchTerm,
   handleSlotChange,
-  glowClass
+  glowClass,
 }) {
-  const isFirstPick = (teamClass === "red-team" && firstPickTeam === "red") || 
-                      (teamClass === "blue-team" && firstPickTeam === "blue");
+  const isFirstPick =
+    (teamClass === "red-team" && firstPickTeam === "red") ||
+    (teamClass === "blue-team" && firstPickTeam === "blue");
 
   return (
     <div className={`team-column ${teamClass}`}>
@@ -31,14 +32,21 @@ export default function TeamColumn({
         {teamSlots.map((hero, localIndex) => {
           const globalIndex = localIndex + startIndex;
           const isNext = globalIndex === nextPickIndex;
-          
+
           return (
-            <article key={globalIndex} className={`slot-card ${isNext ? `next-pick ${glowClass}` : ""}`}>
+            <article
+              key={globalIndex}
+              className={`slot-card ${isNext ? `next-pick ${glowClass}` : ""}`}
+            >
               <div className="slot-label">{slotLabels[globalIndex]}</div>
               <div className="slot-top-row">
                 <div className="slot-info">
                   {hero && getBrawlerImage(hero) ? (
-                    <img src={getBrawlerImage(hero)} alt={hero} className="slot-avatar" />
+                    <img
+                      src={getBrawlerImage(hero)}
+                      alt={hero}
+                      className="slot-avatar"
+                    />
                   ) : (
                     <div className="slot-avatar empty">?</div>
                   )}
@@ -47,11 +55,15 @@ export default function TeamColumn({
                     {hero && <div className="slot-brawler-name">{hero}</div>}
                   </div>
                 </div>
-                <button type="button" className="choose-button" onClick={() => toggleSlot(globalIndex)}>
+                <button
+                  type="button"
+                  className="choose-button"
+                  onClick={() => toggleSlot(globalIndex)}
+                >
                   {activeSlot === globalIndex ? "Close" : "Pick"}
                 </button>
               </div>
-              
+
               {activeSlot === globalIndex && (
                 <div className="picker-container">
                   <div className="picker-search">
@@ -65,7 +77,8 @@ export default function TeamColumn({
                   </div>
                   <div className="picker-grid">
                     {filteredBrawlers.map((brawler) => {
-                      const optionDisabled = selectedHeroes.has(brawler) && brawler !== hero;
+                      const optionDisabled =
+                        selectedHeroes.has(brawler) && brawler !== hero;
                       return (
                         <button
                           key={brawler}

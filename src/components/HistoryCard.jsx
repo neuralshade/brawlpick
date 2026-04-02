@@ -11,26 +11,30 @@ export default function HistoryCard({ savedComps }) {
         {savedComps.map((comp) => {
           const redSlots = comp.slots.slice(0, 3);
           const blueSlots = comp.slots.slice(3, 6);
-          
+
           return (
             <article key={comp.id} className="saved-item">
               <div className="history-comp-header">
                 <span className="history-comp-map">{comp.mapMode.map}</span>
-                <span className="history-comp-mode">
-                  · {comp.mapMode.mode}
-                </span>
+                <span className="history-comp-mode">· {comp.mapMode.mode}</span>
               </div>
               <div className="saved-teams">
                 {/* Red Team History */}
                 <div className="saved-team red-team">
                   <h3>
                     Red Team
-                    {comp.firstPickTeam === TEAM_RED && <span className="saved-team-badge red">FP</span>}
+                    {comp.firstPickTeam === TEAM_RED && (
+                      <span className="saved-team-badge red">FP</span>
+                    )}
                   </h3>
                   <ul>
                     {redSlots.map((item) => (
                       <li key={item.slot} className="saved-slot-row">
-                        <img src={getBrawlerImage(item.hero)} alt={item.hero} className="saved-slot-avatar" />
+                        <img
+                          src={getBrawlerImage(item.hero)}
+                          alt={item.hero}
+                          className="saved-slot-avatar"
+                        />
                         <div>
                           <div className="saved-slot-order">{item.order}</div>
                           <div className="saved-slot-name">{item.hero}</div>
@@ -43,12 +47,18 @@ export default function HistoryCard({ savedComps }) {
                 <div className="saved-team blue-team">
                   <h3>
                     Blue Team
-                    {comp.firstPickTeam === TEAM_BLUE && <span className="saved-team-badge blue">FP</span>}
+                    {comp.firstPickTeam === TEAM_BLUE && (
+                      <span className="saved-team-badge blue">FP</span>
+                    )}
                   </h3>
                   <ul>
                     {blueSlots.map((item) => (
                       <li key={item.slot} className="saved-slot-row">
-                        <img src={getBrawlerImage(item.hero)} alt={item.hero} className="saved-slot-avatar" />
+                        <img
+                          src={getBrawlerImage(item.hero)}
+                          alt={item.hero}
+                          className="saved-slot-avatar"
+                        />
                         <div>
                           <div className="saved-slot-order">{item.order}</div>
                           <div className="saved-slot-name">{item.hero}</div>

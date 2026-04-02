@@ -1,5 +1,11 @@
 import { useMemo, useState, useEffect } from "react";
-import { TEAM_RED, TEAM_BLUE, MAP_MODE_OPTIONS, BRAWLERS, slotLabels } from "../constants";
+import {
+  TEAM_RED,
+  TEAM_BLUE,
+  MAP_MODE_OPTIONS,
+  BRAWLERS,
+  slotLabels,
+} from "../constants";
 import MapSelector from "../components/MapSelector";
 import TeamColumn from "../components/TeamColumn";
 
@@ -13,22 +19,31 @@ function MatchMaker({ savedComps, setSavedComps }) {
   const [notes, setNotes] = useState("");
   const [showToast, setShowToast] = useState("");
 
-  const selectedHeroes = useMemo(() => 
-    new Set([...slots.filter(Boolean), ...banSlots.filter(Boolean)]), 
-  [slots, banSlots]);
+  const selectedHeroes = useMemo(
+    () => new Set([...slots.filter(Boolean), ...banSlots.filter(Boolean)]),
+    [slots, banSlots],
+  );
 
   const orderSequence = useMemo(
-    () => (firstPickTeam === TEAM_RED ? [0, 3, 4, 1, 2, 5] : [3, 0, 1, 4, 5, 2]),
-    [firstPickTeam]
+    () =>
+      firstPickTeam === TEAM_RED ? [0, 3, 4, 1, 2, 5] : [3, 0, 1, 4, 5, 2],
+    [firstPickTeam],
   );
 
   const nextPickIndex = useMemo(
     () => orderSequence.find((index) => !slots[index]),
-    [orderSequence, slots]
+    [orderSequence, slots],
   );
 
   const orderLabels = useMemo(() => {
-    const labels = ["First Pick", "Pick 2", "Pick 3", "Pick 4", "Pick 5", "Last Pick"];
+    const labels = [
+      "First Pick",
+      "Pick 2",
+      "Pick 3",
+      "Pick 4",
+      "Pick 5",
+      "Last Pick",
+    ];
     return orderSequence.reduce((map, slot, index) => {
       map[slot] = labels[index];
       return map;
@@ -37,7 +52,10 @@ function MatchMaker({ savedComps, setSavedComps }) {
 
   const toggleSlot = (index) => {
     if (activeSlot === index) setActiveSlot(null);
-    else { setActiveSlot(index); setSearchTerm(""); }
+    else {
+      setActiveSlot(index);
+      setSearchTerm("");
+    }
   };
 
   const handleSlotChange = (index, value) => {
@@ -67,18 +85,18 @@ function MatchMaker({ savedComps, setSavedComps }) {
         notes: notes,
         bans: {
           red: banSlots.slice(0, 3),
-          blue: banSlots.slice(3, 6)
+          blue: banSlots.slice(3, 6),
         },
         slots: slots.map((hero, index) => ({
           slot: slotLabels[index] || `Slot ${index + 1}`,
           hero,
           order: orderLabels[index] || `Pick ${index + 1}`,
         })),
-        result: null
+        result: null,
       },
       ...prev,
     ]);
-    
+
     setSlots(Array(6).fill(""));
     setBanSlots(Array(6).fill(""));
     setNotes("");
@@ -94,27 +112,44 @@ function MatchMaker({ savedComps, setSavedComps }) {
 
   const filteredBrawlers = useMemo(() => {
     if (!searchTerm) return BRAWLERS;
-    return BRAWLERS.filter((b) => b.toLowerCase().includes(searchTerm.toLowerCase()));
+    return BRAWLERS.filter((b) =>
+      b.toLowerCase().includes(searchTerm.toLowerCase()),
+    );
   }, [searchTerm]);
 
   const commonTeamProps = {
-    firstPickTeam, nextPickIndex, orderLabels, activeSlot, searchTerm,
-    filteredBrawlers, selectedHeroes, toggleSlot, setSearchTerm, handleSlotChange
+    firstPickTeam,
+    nextPickIndex,
+    orderLabels,
+    activeSlot,
+    searchTerm,
+    filteredBrawlers,
+    selectedHeroes,
+    toggleSlot,
+    setSearchTerm,
+    handleSlotChange,
   };
 
   const draftSuggestions = useMemo(() => {
     if (!savedComps || savedComps.length === 0) return [];
 
     // Filtra partidas concluídas do mapa atual
-    const mapMatches = savedComps.filter(m => m.mapMode.map === selectedMapMode.map && (m.result === 'win' || m.result === 'loss'));
-    
+    const mapMatches = savedComps.filter(
+      (m) =>
+        m.mapMode.map === selectedMapMode.map &&
+        (m.result === "win" || m.result === "loss"),
+    );
+
     const stats = {};
-    mapMatches.forEach(m => {
-      const blueWon = m.result === 'win';
+    mapMatches.forEach((m) => {
+      const blueWon = m.result === "win";
       // Analisa o desempenho APENAS do time azul no histórico
-      const blueHeroes = m.slots.slice(3, 6).map(s => s.hero).filter(Boolean);
-      
-      blueHeroes.forEach(hero => {
+      const blueHeroes = m.slots
+        .slice(3, 6)
+        .map((s) => s.hero)
+        .filter(Boolean);
+
+      blueHeroes.forEach((hero) => {
         if (!stats[hero]) stats[hero] = { wins: 0, played: 0 };
         stats[hero].played++;
         if (blueWon) stats[hero].wins++;
@@ -123,12 +158,12 @@ function MatchMaker({ savedComps, setSavedComps }) {
 
     // Calcula WR, filtra os já escolhidos/banidos, e ordena
     return Object.entries(stats)
-      .map(([hero, data]) => ({ 
-        hero, 
-        wr: ((data.wins / data.played) * 100).toFixed(1), 
-        played: data.played 
+      .map(([hero, data]) => ({
+        hero,
+        wr: ((data.wins / data.played) * 100).toFixed(1),
+        played: data.played,
       }))
-      .filter(s => !selectedHeroes.has(s.hero) && s.played >= 1) // Remove brawlers já draftados
+      .filter((s) => !selectedHeroes.has(s.hero) && s.played >= 1) // Remove brawlers já draftados
       .sort((a, b) => b.wr - a.wr || b.played - a.played)
       .slice(0, 5); // Top 5 sugestões
   }, [savedComps, selectedMapMode, selectedHeroes]);
@@ -141,7 +176,11 @@ function MatchMaker({ savedComps, setSavedComps }) {
           <button
             type="button"
             className={`toggle-switch ${firstPickTeam}`}
-            onClick={() => setFirstPickTeam(firstPickTeam === TEAM_RED ? TEAM_BLUE : TEAM_RED)}
+            onClick={() =>
+              setFirstPickTeam(
+                firstPickTeam === TEAM_RED ? TEAM_BLUE : TEAM_RED,
+              )
+            }
           >
             <span className="switch-track" />
             <span className="switch-thumb" />
@@ -152,9 +191,9 @@ function MatchMaker({ savedComps, setSavedComps }) {
         </div>
       </div>
 
-      <MapSelector 
-        selectedMapMode={selectedMapMode} 
-        setSelectedMapMode={setSelectedMapMode} 
+      <MapSelector
+        selectedMapMode={selectedMapMode}
+        setSelectedMapMode={setSelectedMapMode}
       />
 
       <section className="pick-grid ban-section">
@@ -163,15 +202,26 @@ function MatchMaker({ savedComps, setSavedComps }) {
             <span>BLUE TEAM BANS</span>
           </div>
           <div className="slot-row ban-slot-row">
-            {[3, 4, 5].map(idx => (
-              <article key={`blue-ban-${idx}`} className="slot-card ban-slot-card">
-                <select 
+            {[3, 4, 5].map((idx) => (
+              <article
+                key={`blue-ban-${idx}`}
+                className="slot-card ban-slot-card"
+              >
+                <select
                   className="ban-select"
-                  value={banSlots[idx]} 
-                  onChange={(e) => handleBanChange(idx, e.target.value)} 
+                  value={banSlots[idx]}
+                  onChange={(e) => handleBanChange(idx, e.target.value)}
                 >
                   <option value="">Ban...</option>
-                  {BRAWLERS.map(b => <option key={b} value={b} disabled={selectedHeroes.has(b) && banSlots[idx] !== b}>{b}</option>)}
+                  {BRAWLERS.map((b) => (
+                    <option
+                      key={b}
+                      value={b}
+                      disabled={selectedHeroes.has(b) && banSlots[idx] !== b}
+                    >
+                      {b}
+                    </option>
+                  ))}
                 </select>
               </article>
             ))}
@@ -183,15 +233,26 @@ function MatchMaker({ savedComps, setSavedComps }) {
             <span>RED TEAM BANS</span>
           </div>
           <div className="slot-row ban-slot-row">
-            {[0, 1, 2].map(idx => (
-              <article key={`red-ban-${idx}`} className="slot-card ban-slot-card">
-                <select 
+            {[0, 1, 2].map((idx) => (
+              <article
+                key={`red-ban-${idx}`}
+                className="slot-card ban-slot-card"
+              >
+                <select
                   className="ban-select"
-                  value={banSlots[idx]} 
-                  onChange={(e) => handleBanChange(idx, e.target.value)} 
+                  value={banSlots[idx]}
+                  onChange={(e) => handleBanChange(idx, e.target.value)}
                 >
                   <option value="">Ban...</option>
-                  {BRAWLERS.map(b => <option key={b} value={b} disabled={selectedHeroes.has(b) && banSlots[idx] !== b}>{b}</option>)}
+                  {BRAWLERS.map((b) => (
+                    <option
+                      key={b}
+                      value={b}
+                      disabled={selectedHeroes.has(b) && banSlots[idx] !== b}
+                    >
+                      {b}
+                    </option>
+                  ))}
                 </select>
               </article>
             ))}
@@ -200,12 +261,26 @@ function MatchMaker({ savedComps, setSavedComps }) {
       </section>
 
       <section className="pick-grid">
-        <TeamColumn teamName="BLUE TEAM" teamClass="blue-team" glowClass="blue-glow" startIndex={3} teamSlots={slots.slice(3, 6)} {...commonTeamProps} />
-        <TeamColumn teamName="RED TEAM" teamClass="red-team" glowClass="red-glow" startIndex={0} teamSlots={slots.slice(0, 3)} {...commonTeamProps} />
+        <TeamColumn
+          teamName="BLUE TEAM"
+          teamClass="blue-team"
+          glowClass="blue-glow"
+          startIndex={3}
+          teamSlots={slots.slice(3, 6)}
+          {...commonTeamProps}
+        />
+        <TeamColumn
+          teamName="RED TEAM"
+          teamClass="red-team"
+          glowClass="red-glow"
+          startIndex={0}
+          teamSlots={slots.slice(0, 3)}
+          {...commonTeamProps}
+        />
       </section>
 
       <section className="map-mode-card notes-section">
-        <textarea 
+        <textarea
           className="notes-textarea"
           placeholder="Strategic notes for this map/draft (e.g., Rotate through the left bush, focus on mid control...)"
           value={notes}
@@ -214,8 +289,14 @@ function MatchMaker({ savedComps, setSavedComps }) {
       </section>
 
       <section className="actions-card">
-        {showToast && <span className="toast-message toast-success">{showToast}</span>}
-        <button className="save-draft-btn" disabled={!canSave} onClick={registerMatch}>
+        {showToast && (
+          <span className="toast-message toast-success">{showToast}</span>
+        )}
+        <button
+          className="save-draft-btn"
+          disabled={!canSave}
+          onClick={registerMatch}
+        >
           Register Match
         </button>
       </section>

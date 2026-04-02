@@ -11,7 +11,9 @@
     box-sizing: border-box;
 }
 
-html, body, #root {
+html,
+body,
+#root {
     min-height: 100%;
 }
 
@@ -20,7 +22,10 @@ body {
     background-color: #0049c4;
 }
 
-button, select, input, textarea {
+button,
+select,
+input,
+textarea {
     font: inherit;
 }
 
@@ -75,7 +80,10 @@ button, select, input, textarea {
     background: #f8fafc;
     color: #0f172a;
     cursor: pointer;
-    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        transform 0.2s ease;
 }
 
 .map-mode-option:hover,
@@ -100,7 +108,12 @@ button, select, input, textarea {
     margin-bottom: 0.75rem;
     text-transform: uppercase;
     padding-bottom: 0.25rem;
-    text-shadow: 0 0 2px #000, 0 0 4px #000, 1px 1px 0 #000, -1px -1px 0 #000, 2px 2px 4px rgba(0, 0, 0, 0.7);
+    text-shadow:
+        0 0 2px #000,
+        0 0 4px #000,
+        1px 1px 0 #000,
+        -1px -1px 0 #000,
+        2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
 .mode-icon {
@@ -192,7 +205,12 @@ button, select, input, textarea {
     gap: 0.35rem;
     margin-bottom: 1rem;
     color: #fff;
-    text-shadow: 0 0 2px #000, 0 0 4px #000, 1px 1px 0 #000, -1px -1px 0 #000, 2px 2px 4px rgba(0, 0, 0, 0.7);
+    text-shadow:
+        0 0 2px #000,
+        0 0 4px #000,
+        1px 1px 0 #000,
+        -1px -1px 0 #000,
+        2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
 .slot-row {
@@ -209,7 +227,9 @@ button, select, input, textarea {
     box-shadow: 0 24px 40px rgba(15, 23, 42, 0.06);
     display: grid;
     gap: 0.85rem;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 .slot-card.blue-glow.next-pick {
@@ -276,7 +296,9 @@ button, select, input, textarea {
     background: #ffffff;
     color: #0f172a;
     cursor: pointer;
-    transition: background 0.2s ease, border-color 0.2s ease;
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
     white-space: nowrap;
 }
 
@@ -316,7 +338,10 @@ button, select, input, textarea {
     background: #ffffff;
     color: #0f172a;
     cursor: pointer;
-    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 .brawler-option img {
@@ -375,8 +400,14 @@ button, select, input, textarea {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(5px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .history-card {
@@ -433,8 +464,12 @@ button, select, input, textarea {
     color: #ffffff;
 }
 
-.saved-team-badge.red { background: #dc2626; }
-.saved-team-badge.blue { background: #2563eb; }
+.saved-team-badge.red {
+    background: #dc2626;
+}
+.saved-team-badge.blue {
+    background: #2563eb;
+}
 
 .saved-team ul {
     list-style: none;
@@ -469,8 +504,12 @@ button, select, input, textarea {
     color: #334155;
 }
 
-.saved-team.red-team h3 { color: #b91c1c; }
-.saved-team.blue-team h3 { color: #1d4ed8; }
+.saved-team.red-team h3 {
+    color: #b91c1c;
+}
+.saved-team.blue-team h3 {
+    color: #1d4ed8;
+}
 
 /* =========================================
    NOVAS CLASSES - REFATORAÇÃO INLINE STYLES
@@ -491,7 +530,12 @@ button, select, input, textarea {
     text-decoration: none;
     font-weight: bold;
     font-size: 18px;
-    text-shadow: 0 0 2px #000, 0 0 4px #000, 1px 1px 0 #000, -1px -1px 0 #000, 2px 2px 4px rgba(0, 0, 0, 0.7);
+    text-shadow:
+        0 0 2px #000,
+        0 0 4px #000,
+        1px 1px 0 #000,
+        -1px -1px 0 #000,
+        2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
 /* HistoryCard.jsx */
