@@ -1,4 +1,5 @@
-import { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState, useEffect } from "react";
+import styled from "styled-components";
 import {
   TEAM_RED,
   TEAM_BLUE,
@@ -8,6 +9,170 @@ import {
 } from "../constants";
 import MapSelector from "../components/MapSelector";
 import TeamColumn from "../components/TeamColumn";
+import { AppShell, PickGrid, BaseCard } from "../styles/Shared";
+
+const TopCentered = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1.75rem;
+`;
+
+const FpAlone = styled.div`
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 1.2rem;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+`;
+
+const SliderLabel = styled.div`
+  font-size: 0.95rem;
+  color: #334155;
+`;
+
+const SliderStatus = styled.div`
+  font-size: 0.95rem;
+  color: #475569;
+  width: 3rem;
+  text-align: center;
+`;
+
+const ToggleSwitch = styled.button`
+  position: relative;
+  width: 74px;
+  height: 36px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+
+  .switch-track {
+    position: absolute;
+    inset: 0;
+    border-radius: 999px;
+  }
+
+  .switch-thumb {
+    position: absolute;
+    left: 4px;
+    top: 4px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #ffffff;
+    box-shadow: 0 10px 20px rgba(15, 23, 42, 0.12);
+    transition: transform 0.2s ease;
+    transform: ${(props) => (props.$isBlue ? "translateX(38px)" : "none")};
+  }
+`;
+
+const BanColumn = styled.div`
+  width: 100%;
+  background: rgba(0, 0, 0, 0.25);
+  border: 2px solid #000;
+  padding: 1.25rem;
+  box-shadow: 0 24px 40px rgba(15, 23, 42, 0.06);
+`;
+
+const TeamHeader = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1rem;
+  color: #fff;
+  text-shadow:
+    0 0 2px #000,
+    0 0 4px #000,
+    1px 1px 0 #000,
+    -1px -1px 0 #000,
+    2px 2px 4px rgba(0, 0, 0, 0.7);
+`;
+
+const BanRow = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 1rem;
+`;
+
+const BanCard = styled.article`
+  width: 100%;
+  padding: 1rem;
+  background: #fff;
+  border: 2px solid #000;
+  box-shadow: 0 24px 40px rgba(15, 23, 42, 0.06);
+`;
+
+const BanSelect = styled.select`
+  width: 100%;
+  padding: 0.75rem;
+  background: #fff;
+  color: #0f172a;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.5rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+`;
+
+const NotesTextarea = styled.textarea`
+  width: 100%;
+  padding: 12px;
+  background: #fff;
+  color: #0f172a;
+  border: 2px solid #000;
+  min-height: 80px;
+  font-family: inherit;
+  font-size: 1rem;
+  resize: vertical;
+`;
+
+const ActionsCard = styled.section`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+
+  @media (max-width: 480px) {
+    justify-content: space-between;
+  }
+`;
+
+const ToastMessage = styled.span`
+  color: #10b981;
+  font-size: 0.95rem;
+  font-weight: bold;
+  animation: fadeIn 0.3s ease;
+`;
+
+const SaveButton = styled.button`
+  width: 100%;
+  padding: 15px;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 0.95rem;
+  color: #ffffff;
+  background: #2563eb;
+  cursor: pointer;
+  box-shadow: 0 14px 30px rgba(37, 99, 235, 0.18);
+  transition: background 0.2s;
+
+  &:hover:not(:disabled) {
+    background: #1d4ed8;
+  }
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+`;
 
 function MatchMaker({ savedComps, setSavedComps }) {
   const [firstPickTeam, setFirstPickTeam] = useState(TEAM_RED);
@@ -83,10 +248,7 @@ function MatchMaker({ savedComps, setSavedComps }) {
         firstPickTeam,
         mapMode: selectedMapMode,
         notes: notes,
-        bans: {
-          red: banSlots.slice(0, 3),
-          blue: banSlots.slice(3, 6),
-        },
+        bans: { red: banSlots.slice(0, 3), blue: banSlots.slice(3, 6) },
         slots: slots.map((hero, index) => ({
           slot: slotLabels[index] || `Slot ${index + 1}`,
           hero,
@@ -130,52 +292,14 @@ function MatchMaker({ savedComps, setSavedComps }) {
     handleSlotChange,
   };
 
-  const draftSuggestions = useMemo(() => {
-    if (!savedComps || savedComps.length === 0) return [];
-
-    // Filtra partidas concluídas do mapa atual
-    const mapMatches = savedComps.filter(
-      (m) =>
-        m.mapMode.map === selectedMapMode.map &&
-        (m.result === "win" || m.result === "loss"),
-    );
-
-    const stats = {};
-    mapMatches.forEach((m) => {
-      const blueWon = m.result === "win";
-      // Analisa o desempenho APENAS do time azul no histórico
-      const blueHeroes = m.slots
-        .slice(3, 6)
-        .map((s) => s.hero)
-        .filter(Boolean);
-
-      blueHeroes.forEach((hero) => {
-        if (!stats[hero]) stats[hero] = { wins: 0, played: 0 };
-        stats[hero].played++;
-        if (blueWon) stats[hero].wins++;
-      });
-    });
-
-    // Calcula WR, filtra os já escolhidos/banidos, e ordena
-    return Object.entries(stats)
-      .map(([hero, data]) => ({
-        hero,
-        wr: ((data.wins / data.played) * 100).toFixed(1),
-        played: data.played,
-      }))
-      .filter((s) => !selectedHeroes.has(s.hero) && s.played >= 1) // Remove brawlers já draftados
-      .sort((a, b) => b.wr - a.wr || b.played - a.played)
-      .slice(0, 5); // Top 5 sugestões
-  }, [savedComps, selectedMapMode, selectedHeroes]);
-
   return (
-    <main className="app-shell">
-      <div className="fp-top fp-top-centered">
-        <div className="slider-control fp-alone">
-          <div className="slider-label">First Pick</div>
-          <button
+    <AppShell>
+      <TopCentered>
+        <FpAlone>
+          <SliderLabel>First Pick</SliderLabel>
+          <ToggleSwitch
             type="button"
-            className={`toggle-switch ${firstPickTeam}`}
+            $isBlue={firstPickTeam === TEAM_BLUE}
             onClick={() =>
               setFirstPickTeam(
                 firstPickTeam === TEAM_RED ? TEAM_BLUE : TEAM_RED,
@@ -184,41 +308,34 @@ function MatchMaker({ savedComps, setSavedComps }) {
           >
             <span className="switch-track" />
             <span className="switch-thumb" />
-          </button>
-          <div className="slider-status">
+          </ToggleSwitch>
+          <SliderStatus>
             {firstPickTeam === TEAM_RED ? "Red" : "Blue"}
-          </div>
-        </div>
-      </div>
+          </SliderStatus>
+        </FpAlone>
+      </TopCentered>
 
       <MapSelector
         selectedMapMode={selectedMapMode}
         setSelectedMapMode={setSelectedMapMode}
       />
 
-      <section className="pick-grid ban-section">
-        <div className="team-column blue-team">
-          <div className="team-header">
+      <PickGrid style={{ marginBottom: "1.5rem" }}>
+        <BanColumn>
+          <TeamHeader>
             <span>BLUE TEAM BANS</span>
-          </div>
-          <div className="slot-row ban-slot-row">
+          </TeamHeader>
+          <BanRow>
             {[3, 4, 5].map((idx) => (
-              <article
-                key={`blue-ban-${idx}`}
-                className="slot-card ban-slot-card"
-              >
-                <select
-                  className="ban-select"
+              <BanCard key={`blue-ban-${idx}`}>
+                <BanSelect
                   value={banSlots[idx]}
                   onChange={(e) => handleBanChange(idx, e.target.value)}
                 >
                   <option value="">Ban...</option>
                   {BRAWLERS.map((b) => {
-                    // Verifica se já foi pickado no jogo
                     const isPicked = slots.includes(b);
-                    // Verifica se já foi banido pelo próprio time AZUL
                     const isBannedByBlue = banSlots.slice(3, 6).includes(b);
-
                     return (
                       <option
                         key={b}
@@ -231,34 +348,27 @@ function MatchMaker({ savedComps, setSavedComps }) {
                       </option>
                     );
                   })}
-                </select>
-              </article>
+                </BanSelect>
+              </BanCard>
             ))}
-          </div>
-        </div>
+          </BanRow>
+        </BanColumn>
 
-        <div className="team-column red-team">
-          <div className="team-header">
+        <BanColumn>
+          <TeamHeader>
             <span>RED TEAM BANS</span>
-          </div>
-          <div className="slot-row ban-slot-row">
+          </TeamHeader>
+          <BanRow>
             {[0, 1, 2].map((idx) => (
-              <article
-                key={`red-ban-${idx}`}
-                className="slot-card ban-slot-card"
-              >
-                <select
-                  className="ban-select"
+              <BanCard key={`red-ban-${idx}`}>
+                <BanSelect
                   value={banSlots[idx]}
                   onChange={(e) => handleBanChange(idx, e.target.value)}
                 >
                   <option value="">Ban...</option>
                   {BRAWLERS.map((b) => {
-                    // Verifica se já foi pickado no jogo
                     const isPicked = slots.includes(b);
-                    // Verifica se já foi banido pelo próprio time VERMELHO
                     const isBannedByRed = banSlots.slice(0, 3).includes(b);
-
                     return (
                       <option
                         key={b}
@@ -271,14 +381,14 @@ function MatchMaker({ savedComps, setSavedComps }) {
                       </option>
                     );
                   })}
-                </select>
-              </article>
+                </BanSelect>
+              </BanCard>
             ))}
-          </div>
-        </div>
-      </section>
+          </BanRow>
+        </BanColumn>
+      </PickGrid>
 
-      <section className="pick-grid">
+      <PickGrid>
         <TeamColumn
           teamName="BLUE TEAM"
           teamClass="blue-team"
@@ -295,30 +405,23 @@ function MatchMaker({ savedComps, setSavedComps }) {
           teamSlots={slots.slice(0, 3)}
           {...commonTeamProps}
         />
-      </section>
+      </PickGrid>
 
-      <section className="map-mode-card notes-section">
-        <textarea
-          className="notes-textarea"
+      <BaseCard style={{ padding: "1.25rem" }}>
+        <NotesTextarea
           placeholder="Strategic notes for this map/draft (e.g., Rotate through the left bush, focus on mid control...)"
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
         />
-      </section>
+      </BaseCard>
 
-      <section className="actions-card">
-        {showToast && (
-          <span className="toast-message toast-success">{showToast}</span>
-        )}
-        <button
-          className="save-draft-btn"
-          disabled={!canSave}
-          onClick={registerMatch}
-        >
+      <ActionsCard>
+        {showToast && <ToastMessage>{showToast}</ToastMessage>}
+        <SaveButton disabled={!canSave} onClick={registerMatch}>
           Register Match
-        </button>
-      </section>
-    </main>
+        </SaveButton>
+      </ActionsCard>
+    </AppShell>
   );
 }
 

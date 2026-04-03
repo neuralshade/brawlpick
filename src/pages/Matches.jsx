@@ -1,5 +1,153 @@
 import React from "react";
+import styled from "styled-components";
 import { TEAM_RED, TEAM_BLUE, getBrawlerImage } from "../constants";
+import { AppShell, GroupTitle, BaseCard, PickGrid } from "../styles/Shared";
+
+const Subtitle = styled.p`
+  color: #fff;
+  text-shadow: 1px 1px 2px #000;
+  margin-bottom: 2rem;
+`;
+
+const NotesList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+`;
+
+const MatchHeader = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+`;
+
+const MatchInfo = styled.div`
+  p {
+    margin: 0.5rem 0;
+  }
+  .notes {
+    color: #cbd5e1;
+    font-style: italic;
+  }
+  .meta {
+    color: #94a3b8;
+    font-size: 0.9rem;
+    margin: 0;
+  }
+`;
+
+const Actions = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
+const ActionBtn = styled.button`
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  background: ${(props) => (props.$type === "win" ? "#10b981" : "#ef4444")};
+  opacity: ${(props) => (props.$dimmed ? 0.5 : 1)};
+`;
+
+const TeamCol = styled.div`
+  width: 100%;
+  background: rgba(0, 0, 0, 0.25);
+  border: 2px solid #000;
+  padding: 1.25rem;
+  box-shadow: 0 24px 40px rgba(15, 23, 42, 0.06);
+`;
+
+const ColHeader = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+  color: #fff;
+  text-shadow:
+    0 0 2px #000,
+    0 0 4px #000,
+    1px 1px 0 #000,
+    -1px -1px 0 #000,
+    2px 2px 4px rgba(0, 0, 0, 0.7);
+`;
+
+const BansRow = styled.div`
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  margin-bottom: 12px;
+  align-items: center;
+
+  span {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    font-weight: bold;
+  }
+`;
+
+const BanImg = styled.img`
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid #ef4444;
+  object-fit: cover;
+`;
+
+const SlotRow = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+`;
+
+const SlotCard = styled.article`
+  width: 100%;
+  padding: 1.25rem;
+  background: #fff;
+  border: 2px solid #000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+`;
+
+const SlotInfo = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+`;
+
+const SlotAvatar = styled.img`
+  width: 52px;
+  height: 52px;
+  border-radius: 0.95rem;
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  object-fit: cover;
+`;
+
+const OrderBlock = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+  color: #3c455c;
+
+  strong {
+    font-size: 0.95rem;
+    color: #0f172a;
+  }
+`;
+
+const EmptyText = styled.p`
+  color: #aaa;
+`;
 
 export default function Matches({ savedComps, setSavedComps }) {
   const registerResult = (id, result) => {
@@ -10,59 +158,38 @@ export default function Matches({ savedComps, setSavedComps }) {
   };
 
   return (
-    <main className="app-shell matches-main">
-      <div
-        className="map-mode-group-title"
-        style={{ fontSize: "1.5rem", marginBottom: "1rem" }}
-      >
+    <AppShell>
+      <GroupTitle $size="1.5rem" style={{ marginBottom: "1rem" }}>
         Match History
-      </div>
-      <p
-        style={{
-          color: "#fff",
-          textShadow: "1px 1px 2px #000",
-          marginBottom: "2rem",
-        }}
-      >
+      </GroupTitle>
+      <Subtitle>
         View details and set match results to generate statistics.
-      </p>
+      </Subtitle>
 
-      <div className="notes-list">
+      <NotesList>
         {savedComps.map((match) => {
           const dateStr = new Date(match.date || match.id).toLocaleDateString();
           const redSlots = match.slots.slice(0, 3);
           const blueSlots = match.slots.slice(3, 6);
-
-          // Recupera os bans (com fallback para arrays vazios caso sejam partidas antigas salvas sem bans)
           const redBans = match.bans?.red || [];
           const blueBans = match.bans?.blue || [];
 
           return (
-            <div key={match.id} className="map-mode-card">
-              <div
-                className="map-mode-header"
-                style={{ marginBottom: "1rem", alignItems: "flex-start" }}
-              >
-                <div>
-                  <h4
-                    className="map-mode-group-title"
-                    style={{ margin: 0, fontSize: "1.2rem", color: "#f59e0b" }}
+            <BaseCard key={match.id}>
+              <MatchHeader>
+                <MatchInfo>
+                  <GroupTitle
+                    $size="1.2rem"
+                    $color="#f59e0b"
+                    style={{ margin: 0 }}
                   >
                     {match.mapMode.map} - {match.mapMode.mode}
-                  </h4>
-                  <p
-                    style={{
-                      color: "#cbd5e1",
-                      margin: "0.5rem 0",
-                      fontStyle: "italic",
-                    }}
-                  >
+                  </GroupTitle>
+                  <p className="notes">
                     <strong>Notes: </strong>{" "}
                     {match.notes ? match.notes : "No notes."}
                   </p>
-                  <p
-                    style={{ color: "#94a3b8", margin: 0, fontSize: "0.9rem" }}
-                  >
+                  <p className="meta">
                     <strong>Date:</strong> {dateStr} | <strong>Status:</strong>{" "}
                     {match.result === "win"
                       ? "🟢 Win"
@@ -70,181 +197,111 @@ export default function Matches({ savedComps, setSavedComps }) {
                         ? "🔴 Loss"
                         : "⚪ Pending"}
                   </p>
-                </div>
-                <div className="note-actions">
-                  <button
-                    style={{ opacity: match.result === "loss" ? 0.5 : 1 }}
-                    className="btn-win"
+                </MatchInfo>
+                <Actions>
+                  <ActionBtn
+                    $type="win"
+                    $dimmed={match.result === "loss"}
                     onClick={() => registerResult(match.id, "win")}
                   >
                     {match.result === "win" ? "Win Saved" : "Mark Win"}
-                  </button>
-                  <button
-                    style={{ opacity: match.result === "win" ? 0.5 : 1 }}
-                    className="btn-loss"
+                  </ActionBtn>
+                  <ActionBtn
+                    $type="loss"
+                    $dimmed={match.result === "win"}
                     onClick={() => registerResult(match.id, "loss")}
                   >
                     {match.result === "loss" ? "Loss Saved" : "Mark Loss"}
-                  </button>
-                </div>
-              </div>
+                  </ActionBtn>
+                </Actions>
+              </MatchHeader>
 
-              <div className="pick-grid">
+              <PickGrid>
                 {/* BLUE TEAM */}
-                <div className="team-column blue-team">
-                  <div className="team-header">
+                <TeamCol>
+                  <ColHeader>
                     <span>
                       BLUE TEAM {match.firstPickTeam === TEAM_BLUE && "(FP)"}
                     </span>
-                  </div>
-
-                  {/* Seção de Bans do Time Azul */}
+                  </ColHeader>
                   {blueBans.length > 0 && (
-                    <div
-                      style={{
-                        display: "flex",
-                        gap: "8px",
-                        padding: "8px",
-                        background: "rgba(0,0,0,0.2)",
-                        borderRadius: "8px",
-                        marginBottom: "12px",
-                        alignItems: "center",
-                      }}
-                    >
-                      <span
-                        style={{
-                          fontSize: "0.75rem",
-                          color: "#94a3b8",
-                          fontWeight: "bold",
-                        }}
-                      >
-                        BANS:
-                      </span>
+                    <BansRow>
+                      <span>BANS:</span>
                       {blueBans.map((ban, idx) =>
                         ban ? (
-                          <img
-                            key={`blue-ban-${idx}`}
+                          <BanImg
+                            key={idx}
                             src={getBrawlerImage(ban)}
-                            alt={ban}
                             title={ban}
-                            style={{
-                              width: "28px",
-                              height: "28px",
-                              borderRadius: "50%",
-                              border: "1px solid #ef4444",
-                              objectFit: "cover",
-                            }}
                           />
                         ) : null,
                       )}
-                    </div>
+                    </BansRow>
                   )}
-
-                  <div className="slot-row">
+                  <SlotRow>
                     {blueSlots.map((item) => (
-                      <article
-                        key={item.slot}
-                        className="slot-card slot-top-row"
-                      >
-                        <div className="slot-info">
-                          <img
+                      <SlotCard key={item.slot}>
+                        <SlotInfo>
+                          <SlotAvatar
                             src={getBrawlerImage(item.hero)}
                             alt={item.hero}
-                            className="slot-avatar"
                           />
-                          <div className="slot-order-block">
-                            <span className="slot-order">{item.order}</span>
-                            <span className="slot-brawler-name">
-                              <strong>{item.hero}</strong>
-                            </span>
-                          </div>
-                        </div>
-                      </article>
+                          <OrderBlock>
+                            <span>{item.order}</span>
+                            <strong>{item.hero}</strong>
+                          </OrderBlock>
+                        </SlotInfo>
+                      </SlotCard>
                     ))}
-                  </div>
-                </div>
+                  </SlotRow>
+                </TeamCol>
 
                 {/* RED TEAM */}
-                <div className="team-column red-team">
-                  <div className="team-header">
+                <TeamCol>
+                  <ColHeader>
                     <span>
                       RED TEAM {match.firstPickTeam === TEAM_RED && "(FP)"}
                     </span>
-                  </div>
-
-                  {/* Seção de Bans do Time Vermelho */}
+                  </ColHeader>
                   {redBans.length > 0 && (
-                    <div
-                      style={{
-                        display: "flex",
-                        gap: "8px",
-                        padding: "8px",
-                        background: "rgba(0,0,0,0.2)",
-                        borderRadius: "8px",
-                        marginBottom: "12px",
-                        alignItems: "center",
-                      }}
-                    >
-                      <span
-                        style={{
-                          fontSize: "0.75rem",
-                          color: "#94a3b8",
-                          fontWeight: "bold",
-                        }}
-                      >
-                        BANS:
-                      </span>
+                    <BansRow>
+                      <span>BANS:</span>
                       {redBans.map((ban, idx) =>
                         ban ? (
-                          <img
-                            key={`red-ban-${idx}`}
+                          <BanImg
+                            key={idx}
                             src={getBrawlerImage(ban)}
-                            alt={ban}
                             title={ban}
-                            style={{
-                              width: "28px",
-                              height: "28px",
-                              borderRadius: "50%",
-                              border: "1px solid #ef4444",
-                              objectFit: "cover",
-                            }}
                           />
                         ) : null,
                       )}
-                    </div>
+                    </BansRow>
                   )}
-
-                  <div className="slot-row">
+                  <SlotRow>
                     {redSlots.map((item) => (
-                      <article
-                        key={item.slot}
-                        className="slot-card slot-top-row"
-                      >
-                        <div className="slot-info">
-                          <img
+                      <SlotCard key={item.slot}>
+                        <SlotInfo>
+                          <SlotAvatar
                             src={getBrawlerImage(item.hero)}
                             alt={item.hero}
-                            className="slot-avatar"
                           />
-                          <div className="slot-order-block">
-                            <span className="slot-order">{item.order}</span>
-                            <span className="slot-brawler-name">
-                              <strong>{item.hero}</strong>
-                            </span>
-                          </div>
-                        </div>
-                      </article>
+                          <OrderBlock>
+                            <span>{item.order}</span>
+                            <strong>{item.hero}</strong>
+                          </OrderBlock>
+                        </SlotInfo>
+                      </SlotCard>
                     ))}
-                  </div>
-                </div>
-              </div>
-            </div>
+                  </SlotRow>
+                </TeamCol>
+              </PickGrid>
+            </BaseCard>
           );
         })}
         {savedComps.length === 0 && (
-          <p className="empty-text">No matches registered yet.</p>
+          <EmptyText>No matches registered yet.</EmptyText>
         )}
-      </div>
-    </main>
+      </NotesList>
+    </AppShell>
   );
 }

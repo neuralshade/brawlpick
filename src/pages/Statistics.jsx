@@ -1,14 +1,104 @@
 import React, { useRef, useMemo, useState } from "react";
+import styled from "styled-components";
 import { MAP_MODE_OPTIONS, getBrawlerImage } from "../constants";
+import { AppShell, BaseCard, GroupTitle } from "../styles/Shared";
+
+const FilterSection = styled(BaseCard)`
+  background: rgba(0, 0, 0, 0.4);
+  border: 2px solid #000;
+`;
+
+const TabsNav = styled.nav`
+  display: flex;
+  gap: 10px;
+  margin: 20px 0;
+`;
+
+const TabButton = styled.button`
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  background: ${(props) => (props.$active ? "#3b82f6" : "#222")};
+  color: #fff;
+  cursor: pointer;
+`;
+
+const PanelsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+`;
+
+const Panel = styled(BaseCard)`
+  border-color: ${(props) => props.$color || "#000"};
+  background: ${(props) => props.$bg || "rgba(0,0,0,0.25)"};
+`;
+
+const StatsList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  color: #fff;
+`;
+
+const StatsItem = styled.li`
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #444;
+
+  .subvalue {
+    font-size: 0.8rem;
+    color: #aaa;
+  }
+`;
+
+const TierRow = styled.div`
+  display: flex;
+  margin-bottom: 10px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+`;
+
+const TierLabel = styled.div`
+  padding: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  width: 80px;
+  text-align: center;
+  border-right: 2px solid #000;
+  color: #fff;
+`;
+
+const TierBrawlers = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 10px;
+
+  .empty {
+    color: #64748b;
+    margin: auto;
+  }
+`;
+
+const BrawlerIconWrapper = styled.div`
+  text-align: center;
+  img {
+    width: 40px;
+    border-radius: 5px;
+    border: 1px solid #475569;
+  }
+  div {
+    font-size: 10px;
+    color: #fff;
+  }
+`;
 
 export default function Statistics({ savedComps, setSavedComps }) {
-  const [error, setError] = useState("");
-  const [showToast, setShowToast] = useState("");
-  const fileInputRef = useRef(null);
-
   const [filterMap, setFilterMap] = useState("All");
   const [filterMode, setFilterMode] = useState("All");
-  const [activeTab, setActiveTab] = useState("general"); // 'general', 'advanced', 'tierlist'
+  const [activeTab, setActiveTab] = useState("general");
 
   const filteredComps = useMemo(() => {
     return savedComps.filter((match) => {
@@ -19,15 +109,6 @@ export default function Statistics({ savedComps, setSavedComps }) {
     });
   }, [savedComps, filterMap, filterMode]);
 
-  // Funções de Arquivo (Upload / Export) omitidas para brevidade, mantenha as suas originais
-  const handleFileUpload = (event) => {
-    /* Seu código existente */
-  };
-  const exportDatabase = () => {
-    /* Seu código existente */
-  };
-
-  // --- 1. ESTATÍSTICAS BÁSICAS ---
   const totalMatches = filteredComps.length;
   const finishedMatches = filteredComps.filter(
     (m) => m.result === "win" || m.result === "loss",
@@ -35,10 +116,9 @@ export default function Statistics({ savedComps, setSavedComps }) {
 
   const fpAdvantage = useMemo(() => {
     let blueFpWins = 0,
-      blueFpPlayed = 0;
-    let redFpWins = 0,
+      blueFpPlayed = 0,
+      redFpWins = 0,
       redFpPlayed = 0;
-
     finishedMatches.forEach((match) => {
       const blueWon = match.result === "win";
       if (match.firstPickTeam === "blue") {
@@ -49,7 +129,6 @@ export default function Statistics({ savedComps, setSavedComps }) {
         if (!blueWon) redFpWins++;
       }
     });
-
     return {
       blueFpWr:
         blueFpPlayed > 0 ? ((blueFpWins / blueFpPlayed) * 100).toFixed(1) : 0,
@@ -60,11 +139,13 @@ export default function Statistics({ savedComps, setSavedComps }) {
 
   const brawlerStats = useMemo(() => {
     const stats = {};
+    const initBrawler = (hero) => {
+      if (!stats[hero]) stats[hero] = { picks: 0, bans: 0, played: 0, wins: 0 };
+    };
 
     filteredComps.forEach((match) => {
       const blueWon = match.result === "win";
       const isFinished = match.result === "win" || match.result === "loss";
-
       const blueHeroes = match.slots
         .slice(3, 6)
         .map((s) => s.hero)
@@ -78,13 +159,6 @@ export default function Statistics({ savedComps, setSavedComps }) {
         ...(match.bans?.blue || []),
       ].filter(Boolean);
 
-      // Função auxiliar para inicializar status
-      const initBrawler = (hero) => {
-        if (!stats[hero])
-          stats[hero] = { picks: 0, bans: 0, played: 0, wins: 0 };
-      };
-
-      // Contabiliza Picks e Win Rates (Azul vs Vermelho)
       blueHeroes.forEach((hero) => {
         initBrawler(hero);
         stats[hero].picks++;
@@ -93,39 +167,35 @@ export default function Statistics({ savedComps, setSavedComps }) {
           if (blueWon) stats[hero].wins++;
         }
       });
-
       redHeroes.forEach((hero) => {
         initBrawler(hero);
         stats[hero].picks++;
         if (isFinished) {
           stats[hero].played++;
-          if (!blueWon) stats[hero].wins++; // Se azul perdeu, vermelho ganhou
+          if (!blueWon) stats[hero].wins++;
         }
       });
-
-      // Contabiliza Bans
       allBans.forEach((hero) => {
         initBrawler(hero);
         stats[hero].bans++;
       });
     });
 
-    return Object.entries(stats).map(([name, data]) => {
-      const presence =
+    return Object.entries(stats).map(([name, data]) => ({
+      name,
+      ...data,
+      presence:
         totalMatches > 0
           ? (((data.picks + data.bans) / totalMatches) * 100).toFixed(1)
-          : 0;
-      const winRate =
-        data.played > 0 ? ((data.wins / data.played) * 100).toFixed(1) : 0;
-      return { name, ...data, presence, winRate };
-    });
+          : 0,
+      winRate:
+        data.played > 0 ? ((data.wins / data.played) * 100).toFixed(1) : 0,
+    }));
   }, [filteredComps, totalMatches]);
 
-  // --- 2. ESTATÍSTICAS AVANÇADAS (Sinergia e Counters) ---
   const advancedStats = useMemo(() => {
     const synergies = {};
     const counters = {};
-
     finishedMatches.forEach((match) => {
       const blueWon = match.result === "win";
       const blueHeroes = match.slots
@@ -138,7 +208,6 @@ export default function Statistics({ savedComps, setSavedComps }) {
         .map((s) => s.hero)
         .filter(Boolean);
 
-      // Sinergias (Duplas no Time Azul)
       for (let i = 0; i < blueHeroes.length; i++) {
         for (let j = i + 1; j < blueHeroes.length; j++) {
           const pair = `${blueHeroes[i]} & ${blueHeroes[j]}`;
@@ -147,8 +216,6 @@ export default function Statistics({ savedComps, setSavedComps }) {
           if (blueWon) synergies[pair].wins++;
         }
       }
-
-      // Counters (Azul vs Vermelho)
       blueHeroes.forEach((bh) => {
         redHeroes.forEach((rh) => {
           const matchup = `${bh} (You) vs ${rh} (Enm)`;
@@ -161,7 +228,7 @@ export default function Statistics({ savedComps, setSavedComps }) {
 
     const formatStats = (obj) =>
       Object.entries(obj)
-        .filter(([_, d]) => d.played >= 2) // Mínimo de 2 partidas para não poluir
+        .filter(([_, d]) => d.played >= 2)
         .map(([name, d]) => ({
           name,
           played: d.played,
@@ -175,14 +242,12 @@ export default function Statistics({ savedComps, setSavedComps }) {
     };
   }, [finishedMatches]);
 
-  // --- 3. TIER LIST AUTOMÁTICA ---
   const tierList = useMemo(() => {
     const tiers = { S: [], A: [], B: [], C: [] };
     brawlerStats.forEach((b) => {
-      if (b.played < 2) return; // Precisa de amostragem mínima
+      if (b.played < 2) return;
       const wr = parseFloat(b.winRate);
       const pr = parseFloat(b.presence);
-
       if (wr >= 60 && pr >= 20) tiers.S.push(b);
       else if (wr >= 50 && pr >= 10) tiers.A.push(b);
       else if (wr >= 45) tiers.B.push(b);
@@ -191,58 +256,38 @@ export default function Statistics({ savedComps, setSavedComps }) {
     return tiers;
   }, [brawlerStats]);
 
-  const uniqueModes = ["All", ...new Set(MAP_MODE_OPTIONS.map((m) => m.mode))];
-  const uniqueMaps = ["All", ...new Set(MAP_MODE_OPTIONS.map((m) => m.map))];
-
   return (
-    <main className="app-shell stats-main">
-      {/* Cabeçalho e Filtros Omitidos por brevidade - Mantenha o seu HTML de Filtros aqui */}
-      <section
-        className="map-mode-card filters-section"
-        style={{ background: "rgba(0,0,0,0.4)", border: "2px solid #000" }}
-      >
-        <h3 className="map-mode-group-title" style={{ fontSize: "1.2rem" }}>
-          Analysis Filters
-        </h3>
-        {/* Seus selects de mapa e modo */}
-      </section>
+    <AppShell style={{ paddingBottom: "50px" }}>
+      <FilterSection>
+        <GroupTitle $size="1.2rem">Analysis Filters</GroupTitle>
+        {/* Adicione os <select> reais aqui se precisar no futuro */}
+      </FilterSection>
 
-      {/* Navegação de Abas */}
-      <nav
-        className="stats-tabs"
-        style={{ display: "flex", gap: "10px", margin: "20px 0" }}
-      >
-        <button
+      <TabsNav>
+        <TabButton
+          $active={activeTab === "general"}
           onClick={() => setActiveTab("general")}
-          className={activeTab === "general" ? "active-tab" : ""}
         >
           General Stats
-        </button>
-        <button
+        </TabButton>
+        <TabButton
+          $active={activeTab === "advanced"}
           onClick={() => setActiveTab("advanced")}
-          className={activeTab === "advanced" ? "active-tab" : ""}
         >
           Synergies & Counters
-        </button>
-        <button
+        </TabButton>
+        <TabButton
+          $active={activeTab === "tierlist"}
           onClick={() => setActiveTab("tierlist")}
-          className={activeTab === "tierlist" ? "active-tab" : ""}
         >
           Auto Tier List
-        </button>
-      </nav>
+        </TabButton>
+      </TabsNav>
 
-      {/* ABA 1: GERAL */}
       {activeTab === "general" && (
-        <div className="stats-panels-grid">
-          {/* Vantagem de First Pick */}
-          <div
-            className="map-mode-card"
-            style={{ gridColumn: "1 / -1", borderColor: "#f59e0b" }}
-          >
-            <h3 className="map-mode-group-title" style={{ color: "#f59e0b" }}>
-              Win Rate by First Pick
-            </h3>
+        <PanelsGrid>
+          <Panel style={{ gridColumn: "1 / -1" }} $color="#f59e0b">
+            <GroupTitle $color="#f59e0b">Win Rate by First Pick</GroupTitle>
             <div
               style={{
                 display: "flex",
@@ -257,169 +302,113 @@ export default function Statistics({ savedComps, setSavedComps }) {
                 <strong>Red FP Win Rate:</strong> {fpAdvantage.redFpWr}%
               </div>
             </div>
-          </div>
+          </Panel>
 
-          <div
-            className="map-mode-card panel-bans"
-            style={{ borderColor: "#ef4444" }}
-          >
-            <h3 className="map-mode-group-title" style={{ color: "#ef4444" }}>
-              Presence Rate (Pick+Ban)
-            </h3>
-            <ul className="stats-list">
+          <Panel $color="#ef4444" $bg="#2d0a0a">
+            <GroupTitle $color="#ef4444">Presence Rate (Pick+Ban)</GroupTitle>
+            <StatsList>
               {[...brawlerStats]
                 .sort((a, b) => b.presence - a.presence)
                 .slice(0, 10)
                 .map((b, i) => (
-                  <li key={i} className="stats-list-item">
+                  <StatsItem key={i}>
                     <span>{b.name}</span>
                     <strong>
                       {b.presence}%{" "}
-                      <span className="stats-list-subvalue">
+                      <span className="subvalue">
                         ({b.picks}P / {b.bans}B)
                       </span>
                     </strong>
-                  </li>
+                  </StatsItem>
                 ))}
-            </ul>
-          </div>
+            </StatsList>
+          </Panel>
 
-          <div
-            className="map-mode-card panel-winrate"
-            style={{ borderColor: "#10b981" }}
-          >
-            <h3 className="map-mode-group-title" style={{ color: "#10b981" }}>
-              True Win Rate
-            </h3>
-            <span className="panel-subtitle" style={{ color: "#fff" }}>
+          <Panel $color="#10b981" $bg="#0a2d1a">
+            <GroupTitle $color="#10b981">True Win Rate</GroupTitle>
+            <span
+              style={{
+                fontSize: "0.8rem",
+                color: "#aaa",
+                display: "block",
+                marginBottom: "10px",
+                marginTop: "-10px",
+              }}
+            >
               (Corrected: Blue perspective)
             </span>
-            <ul className="stats-list">
+            <StatsList>
               {[...brawlerStats]
                 .filter((b) => b.played > 0)
                 .sort((a, b) => b.winRate - a.winRate)
                 .slice(0, 15)
                 .map((b, i) => (
-                  <li key={i} className="stats-list-item">
+                  <StatsItem key={i}>
                     <span>{b.name}</span>
                     <strong>
                       {b.winRate}%{" "}
-                      <span className="stats-list-subvalue">
-                        ({b.played} games)
-                      </span>
+                      <span className="subvalue">({b.played} games)</span>
                     </strong>
-                  </li>
+                  </StatsItem>
                 ))}
-            </ul>
-          </div>
-        </div>
+            </StatsList>
+          </Panel>
+        </PanelsGrid>
       )}
 
-      {/* ABA 2: AVANÇADO */}
       {activeTab === "advanced" && (
-        <div className="stats-panels-grid">
-          <div className="map-mode-card" style={{ borderColor: "#8b5cf6" }}>
-            <h3 className="map-mode-group-title" style={{ color: "#8b5cf6" }}>
-              Best Synergies (Blue Team)
-            </h3>
-            <ul className="stats-list">
+        <PanelsGrid>
+          <Panel $color="#8b5cf6">
+            <GroupTitle $color="#8b5cf6">Best Synergies (Blue Team)</GroupTitle>
+            <StatsList>
               {advancedStats.synergies.slice(0, 10).map((s, i) => (
-                <li key={i} className="stats-list-item">
+                <StatsItem key={i}>
                   <span>{s.name}</span>
                   <strong>
-                    {s.wr}%{" "}
-                    <span className="stats-list-subvalue">
-                      ({s.played} games)
-                    </span>
+                    {s.wr}% <span className="subvalue">({s.played} games)</span>
                   </strong>
-                </li>
+                </StatsItem>
               ))}
-            </ul>
-          </div>
-          <div className="map-mode-card" style={{ borderColor: "#ec4899" }}>
-            <h3 className="map-mode-group-title" style={{ color: "#ec4899" }}>
+            </StatsList>
+          </Panel>
+          <Panel $color="#ec4899">
+            <GroupTitle $color="#ec4899">
               Best Counters (You vs Enemy)
-            </h3>
-            <ul className="stats-list">
+            </GroupTitle>
+            <StatsList>
               {advancedStats.counters.slice(0, 10).map((c, i) => (
-                <li key={i} className="stats-list-item">
+                <StatsItem key={i}>
                   <span>{c.name}</span>
                   <strong>
-                    {c.wr}%{" "}
-                    <span className="stats-list-subvalue">
-                      ({c.played} games)
-                    </span>
+                    {c.wr}% <span className="subvalue">({c.played} games)</span>
                   </strong>
-                </li>
+                </StatsItem>
               ))}
-            </ul>
-          </div>
-        </div>
+            </StatsList>
+          </Panel>
+        </PanelsGrid>
       )}
 
-      {/* ABA 3: TIER LIST */}
       {activeTab === "tierlist" && (
-        <div className="tierlist-container">
+        <div>
           {Object.entries(tierList).map(([tier, brawlers]) => (
-            <div
-              key={tier}
-              className="tier-row"
-              style={{
-                display: "flex",
-                marginBottom: "10px",
-                background: "rgba(0,0,0,0.5)",
-                borderRadius: "8px",
-              }}
-            >
-              <div
-                className={`tier-label tier-${tier}`}
-                style={{
-                  padding: "20px",
-                  fontSize: "24px",
-                  fontWeight: "bold",
-                  width: "80px",
-                  textAlign: "center",
-                  borderRight: "2px solid #000",
-                  color: "#fff",
-                }}
-              >
-                {tier}
-              </div>
-              <div
-                className="tier-brawlers"
-                style={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  gap: "8px",
-                  padding: "10px",
-                }}
-              >
+            <TierRow key={tier}>
+              <TierLabel className={`tier-${tier}`}>{tier}</TierLabel>
+              <TierBrawlers>
                 {brawlers.map((b) => (
-                  <div key={b.name} style={{ textAlign: "center" }}>
-                    <img
-                      src={getBrawlerImage(b.name)}
-                      alt={b.name}
-                      style={{
-                        width: "40px",
-                        borderRadius: "5px",
-                        border: "1px solid #475569",
-                      }}
-                    />
-                    <div style={{ fontSize: "10px", color: "#fff" }}>
-                      {b.winRate}%
-                    </div>
-                  </div>
+                  <BrawlerIconWrapper key={b.name}>
+                    <img src={getBrawlerImage(b.name)} alt={b.name} />
+                    <div>{b.winRate}%</div>
+                  </BrawlerIconWrapper>
                 ))}
                 {brawlers.length === 0 && (
-                  <span style={{ color: "#64748b", margin: "auto" }}>
-                    No data
-                  </span>
+                  <span className="empty">No data</span>
                 )}
-              </div>
-            </div>
+              </TierBrawlers>
+            </TierRow>
           ))}
         </div>
       )}
-    </main>
+    </AppShell>
   );
 }
