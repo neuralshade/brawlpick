@@ -46,7 +46,7 @@ export default function Statistics({ savedComps, setSavedComps }) {
         if (blueWon) blueFpWins++;
       } else {
         redFpPlayed++;
-        if (blueWon) redFpWins++;
+        if (!blueWon) redFpWins++;
       }
     });
 
