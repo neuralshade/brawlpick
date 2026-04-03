@@ -44,6 +44,11 @@ const BanRow = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
   gap: 1rem;
+
+  @media (max-width: 480px) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+  }
 `;
 
 const BanCard = styled.article`
@@ -52,6 +57,10 @@ const BanCard = styled.article`
   background: #fff;
   border: 2px solid #000;
   box-shadow: 0 24px 40px rgba(15, 23, 42, 0.06);
+
+  @media (max-width: 480px) {
+    padding: 0.5rem;
+  }
 `;
 
 const BanSelect = styled.select`
@@ -63,6 +72,12 @@ const BanSelect = styled.select`
   border-radius: 0.5rem;
   font-family: inherit;
   font-size: 0.95rem;
+
+  @media (max-width: 480px) {
+    padding: 0.5rem;
+    font-size: 0.8rem;
+    text-overflow: ellipsis;
+  }
 `;
 
 const NotesTextarea = styled.textarea`
@@ -84,8 +99,10 @@ const ActionsCard = styled.section`
   gap: 1rem;
   margin-bottom: 1.5rem;
 
-  @media (max-width: 480px) {
-    justify-content: space-between;
+  @media (max-width: 600px) {
+    flex-direction: column-reverse;
+    justify-content: stretch;
+    width: 100%;
   }
 `;
 

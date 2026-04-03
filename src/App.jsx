@@ -15,20 +15,33 @@ const NavContainer = styled.nav`
   border-bottom: 2px solid #000;
   box-shadow: 0 24px 40px rgba(15, 23, 42, 0.06);
 
-  @media (max-width: 600px) {
+  @media (max-width: 768px) {
     flex-direction: column;
-    gap: 15px;
+    padding: 15px;
+    gap: 20px;
   }
 `;
 
 const LinksGroup = styled.div`
   display: flex;
   gap: 30px;
+
+  @media (max-width: 480px) {
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 `;
 
 const ActionsGroup = styled.div`
   display: flex;
   gap: 15px;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
 `;
 
 const ActionButton = styled.button`
@@ -38,9 +51,15 @@ const ActionButton = styled.button`
   padding: 8px 16px;
   cursor: pointer;
   transition: background 0.2s;
+  font-weight: bold;
 
   &:hover {
     background: #1d4ed8;
+  }
+
+  @media (max-width: 480px) {
+    width: 100%;
+    padding: 12px;
   }
 `;
 
@@ -54,6 +73,10 @@ const NavLink = styled(Link)`
     1px 1px 0 #000,
     -1px -1px 0 #000,
     2px 2px 4px rgba(0, 0, 0, 0.7);
+
+  @media (max-width: 480px) {
+    font-size: 16px;
+  }
 `;
 
 function App() {
