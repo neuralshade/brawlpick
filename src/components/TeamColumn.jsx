@@ -10,6 +10,25 @@ const ColumnContainer = styled.div`
   box-shadow: 0 24px 40px rgba(15, 23, 42, 0.06);
 `;
 
+const FpButton = styled.button`
+  margin-top: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  background: ${(props) =>
+    props.$active ? "#fbbf24" : "rgba(255, 255, 255, 0.2)"};
+  color: ${(props) => (props.$active ? "#000" : "#fff")};
+  border: 1px solid
+    ${(props) => (props.$active ? "#f59e0b" : "rgba(255, 255, 255, 0.4)")};
+  border-radius: 0.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background: ${(props) =>
+      props.$active ? "#f59e0b" : "rgba(255, 255, 255, 0.3)"};
+  }
+`;
+
 const TeamHeader = styled.div`
   display: flex;
   flex-direction: column;
@@ -207,6 +226,8 @@ export default function TeamColumn({
   setSearchTerm,
   handleSlotChange,
   glowClass,
+  teamId,
+  setFirstPickTeam,
 }) {
   const isFirstPick =
     (teamClass === "red-team" && firstPickTeam === "red") ||

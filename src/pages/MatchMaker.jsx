@@ -18,63 +18,6 @@ const TopCentered = styled.div`
   margin-bottom: 1.75rem;
 `;
 
-const FpAlone = styled.div`
-  display: inline-flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 0.9rem 1.2rem;
-  background: #ffffff;
-  border: 1px solid #cbd5e1;
-  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
-
-  @media (max-width: 480px) {
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-`;
-
-const SliderLabel = styled.div`
-  font-size: 0.95rem;
-  color: #334155;
-`;
-
-const SliderStatus = styled.div`
-  font-size: 0.95rem;
-  color: #475569;
-  width: 3rem;
-  text-align: center;
-`;
-
-const ToggleSwitch = styled.button`
-  position: relative;
-  width: 74px;
-  height: 36px;
-  border-radius: 999px;
-  background: #e2e8f0;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-
-  .switch-track {
-    position: absolute;
-    inset: 0;
-    border-radius: 999px;
-  }
-
-  .switch-thumb {
-    position: absolute;
-    left: 4px;
-    top: 4px;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: #ffffff;
-    box-shadow: 0 10px 20px rgba(15, 23, 42, 0.12);
-    transition: transform 0.2s ease;
-    transform: ${(props) => (props.$isBlue ? "translateX(38px)" : "none")};
-  }
-`;
-
 const BanColumn = styled.div`
   width: 100%;
   background: rgba(0, 0, 0, 0.25);
@@ -294,27 +237,6 @@ function MatchMaker({ savedComps, setSavedComps }) {
 
   return (
     <AppShell>
-      <TopCentered>
-        <FpAlone>
-          <SliderLabel>First Pick</SliderLabel>
-          <ToggleSwitch
-            type="button"
-            $isBlue={firstPickTeam === TEAM_BLUE}
-            onClick={() =>
-              setFirstPickTeam(
-                firstPickTeam === TEAM_RED ? TEAM_BLUE : TEAM_RED,
-              )
-            }
-          >
-            <span className="switch-track" />
-            <span className="switch-thumb" />
-          </ToggleSwitch>
-          <SliderStatus>
-            {firstPickTeam === TEAM_RED ? "Red" : "Blue"}
-          </SliderStatus>
-        </FpAlone>
-      </TopCentered>
-
       <MapSelector
         selectedMapMode={selectedMapMode}
         setSelectedMapMode={setSelectedMapMode}
