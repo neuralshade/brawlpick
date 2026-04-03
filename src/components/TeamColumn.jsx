@@ -229,15 +229,19 @@ export default function TeamColumn({
   teamId,
   setFirstPickTeam,
 }) {
-  const isFirstPick =
-    (teamClass === "red-team" && firstPickTeam === "red") ||
-    (teamClass === "blue-team" && firstPickTeam === "blue");
+  const isFirstPick = firstPickTeam === teamId;
 
   return (
     <ColumnContainer>
       <TeamHeader>
         <span>{teamName}</span>
-        <small>{isFirstPick ? "First Pick" : "Pick 2"}</small>
+        <FpButton
+          type="button"
+          $active={isFirstPick}
+          onClick={() => setFirstPickTeam(teamId)}
+        >
+          {isFirstPick ? "First Pick" : "Second Pick"}
+        </FpButton>
       </TeamHeader>
       <SlotRow>
         {teamSlots.map((hero, localIndex) => {
