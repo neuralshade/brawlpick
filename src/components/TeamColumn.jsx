@@ -18,8 +18,6 @@ const FpButton = styled.button`
   color: ${(props) => (props.$active ? "#000" : "#fff")};
   border: 1px solid
     ${(props) => (props.$active ? "#f59e0b" : "rgba(255, 255, 255, 0.4)")};
-  border-radius: 0.5rem;
-  font-weight: bold;
   cursor: pointer;
   transition: all 0.2s;
 

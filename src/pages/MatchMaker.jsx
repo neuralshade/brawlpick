@@ -316,7 +316,7 @@ function MatchMaker({ savedComps, setSavedComps }) {
           teamName="BLUE TEAM"
           teamClass="blue-team"
           glowClass="blue-glow"
-          teamId={"TEAM_BLUE"}
+          teamId={TEAM_BLUE}
           startIndex={3}
           teamSlots={slots.slice(3, 6)}
           {...commonTeamProps}
@@ -325,7 +325,7 @@ function MatchMaker({ savedComps, setSavedComps }) {
           teamName="RED TEAM"
           teamClass="red-team"
           glowClass="red-glow"
-          teamId={"TEAM_RED"}
+          teamId={TEAM_RED}
           startIndex={0}
           teamSlots={slots.slice(0, 3)}
           {...commonTeamProps}
