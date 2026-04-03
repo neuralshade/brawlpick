@@ -51,7 +51,6 @@ const ActionButton = styled.button`
   padding: 8px 16px;
   cursor: pointer;
   transition: background 0.2s;
-  font-weight: bold;
 
   &:hover {
     background: #1d4ed8;
