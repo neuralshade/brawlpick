@@ -36,9 +36,7 @@ const ActionButton = styled.button`
   color: white;
   border: 2px solid #000;
   padding: 8px 16px;
-  border-radius: 8px;
   cursor: pointer;
-  font-weight: bold;
   transition: background 0.2s;
 
   &:hover {
@@ -49,7 +47,6 @@ const ActionButton = styled.button`
 const NavLink = styled(Link)`
   color: white;
   text-decoration: none;
-  font-weight: bold;
   font-size: 18px;
   text-shadow:
     0 0 2px #000,

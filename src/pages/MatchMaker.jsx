@@ -92,7 +92,6 @@ const ActionsCard = styled.section`
 const ToastMessage = styled.span`
   color: #10b981;
   font-size: 0.95rem;
-  font-weight: bold;
   animation: fadeIn 0.3s ease;
 `;
 
