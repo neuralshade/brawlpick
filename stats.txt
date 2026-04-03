@@ -1,0 +1,48 @@
+Aba: General Stats (Estatísticas Gerais)
+Win Rate by First Pick (Taxa de Vitória por First Pick)
+
+O que significa: Ajuda a descobrir se ter o "First Pick" no draft está realmente dando vantagem para o time.
+
+Como é calculado: O sistema separa as partidas onde o time Azul escolheu primeiro daquelas onde o Vermelho escolheu primeiro, e calcula a porcentagem de vitórias em cada cenário.
+
+⚠️ Dica de Bug Encontrado: No seu código atual, há um errinho de lógica em if (blueWon) redFpWins++. Quando o time vermelho é o First Pick e o time azul ganha, está contando como vitória do vermelho! Para consertar, vá na linha 43 de Statistics.jsx e mude para if (!blueWon) redFpWins++;
+
+Presence Rate (Taxa de Presença / Pick+Ban)
+
+O que significa: Mede o quão "Meta" um Brawler está. Um brawler com muita presença é aquele que os jogadores consideram forte o suficiente para quase sempre ser escolhido ou banido.
+
+Como é calculado: (Total de vezes que foi Escolhido + Total de vezes que foi Banido) ÷ Número Total de Partidas * 100.
+
+True Win Rate (Taxa de Vitória Real)
+
+O que significa: A porcentagem de vezes que um Brawler vence as partidas em que joga.
+
+Como é calculado: O código conta quantas vezes o brawler foi escolhido. Se ele estava no time azul e o azul ganhou, conta como vitória. Se ele estava no time vermelho e o azul perdeu, também conta como vitória para o brawler. Depois faz: (Vitórias ÷ Total de Partidas Jogadas) * 100. Brawlers banidos não entram no cálculo de Win Rate.
+
+Aba: Synergies & Counters (Sinergias e Counters)
+Best Synergies (Melhores Sinergias)
+
+O que significa: Quais pares de Brawlers (duplas) jogam melhor juntos no mesmo time.
+
+Como é calculado: O código olha apenas para os 3 brawlers do Time Azul. Ele forma todas as combinações de 2 possíveis entre eles (ex: Brawler A com Brawler B) e verifica a taxa de vitória dessa dupla sempre que apareceram juntos na mesma partida. Só exibe duplas que jogaram no mínimo 2 vezes juntas.
+
+Best Counters (Melhores Counters)
+
+O que significa: Quais brawlers do seu time lidam melhor com brawlers específicos do time inimigo.
+
+Como é calculado: O sistema cruza os picks do Time Azul (Você) com os picks do Time Vermelho (Inimigo). Se o Azul tem um "Rico" e o Vermelho tem um "Edgar", ele anota "Rico vs Edgar". Calcula a porcentagem de vezes que o seu Brawler venceu quando estava contra esse Brawler inimigo específico.
+
+Aba: Auto Tier List
+Auto Tier List (Lista de Tiers Automática)
+
+O que significa: Agrupa automaticamente os brawlers em Tiers (S, A, B, C) baseado na performance geral e relevância deles.
+
+Como é calculado: Ele exige que o brawler tenha sido jogado no mínimo 2 vezes. Usa o cruzamento do Win Rate com o Presence Rate:
+
+Tier S (Muito Forte): Win Rate acima de 60% E presença em mais de 20% das partidas.
+
+Tier A (Forte): Win Rate acima de 50% E presença em mais de 10% das partidas.
+
+Tier B (Mediano): Win Rate acima de 45% (não importa a presença).
+
+Tier C (Fraco): O que sobrar (Win rate abaixo de 45%).

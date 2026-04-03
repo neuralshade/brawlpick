@@ -213,15 +213,24 @@ function MatchMaker({ savedComps, setSavedComps }) {
                   onChange={(e) => handleBanChange(idx, e.target.value)}
                 >
                   <option value="">Ban...</option>
-                  {BRAWLERS.map((b) => (
-                    <option
-                      key={b}
-                      value={b}
-                      disabled={selectedHeroes.has(b) && banSlots[idx] !== b}
-                    >
-                      {b}
-                    </option>
-                  ))}
+                  {BRAWLERS.map((b) => {
+                    // Verifica se já foi pickado no jogo
+                    const isPicked = slots.includes(b);
+                    // Verifica se já foi banido pelo próprio time AZUL
+                    const isBannedByBlue = banSlots.slice(3, 6).includes(b);
+
+                    return (
+                      <option
+                        key={b}
+                        value={b}
+                        disabled={
+                          isPicked || (isBannedByBlue && banSlots[idx] !== b)
+                        }
+                      >
+                        {b}
+                      </option>
+                    );
+                  })}
                 </select>
               </article>
             ))}
@@ -244,15 +253,24 @@ function MatchMaker({ savedComps, setSavedComps }) {
                   onChange={(e) => handleBanChange(idx, e.target.value)}
                 >
                   <option value="">Ban...</option>
-                  {BRAWLERS.map((b) => (
-                    <option
-                      key={b}
-                      value={b}
-                      disabled={selectedHeroes.has(b) && banSlots[idx] !== b}
-                    >
-                      {b}
-                    </option>
-                  ))}
+                  {BRAWLERS.map((b) => {
+                    // Verifica se já foi pickado no jogo
+                    const isPicked = slots.includes(b);
+                    // Verifica se já foi banido pelo próprio time VERMELHO
+                    const isBannedByRed = banSlots.slice(0, 3).includes(b);
+
+                    return (
+                      <option
+                        key={b}
+                        value={b}
+                        disabled={
+                          isPicked || (isBannedByRed && banSlots[idx] !== b)
+                        }
+                      >
+                        {b}
+                      </option>
+                    );
+                  })}
                 </select>
               </article>
             ))}

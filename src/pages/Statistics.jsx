@@ -380,6 +380,7 @@ export default function Statistics({ savedComps, setSavedComps }) {
                   width: "80px",
                   textAlign: "center",
                   borderRight: "2px solid #000",
+                  color: "#fff",
                 }}
               >
                 {tier}
