@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { MAP_MODE_OPTIONS, getModeIcon } from "../constants";
 import { BaseCard, GroupTitle } from "../styles/Shared";
@@ -47,6 +47,10 @@ const OptionButton = styled.button`
   background: ${(props) => (props.$selected ? "#eff6ff" : "#f8fafc")};
   color: #0f172a;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: ${(props) => (props.$selected ? "bold" : "normal")};
   transition:
     border-color 0.2s ease,
     background 0.2s ease,
@@ -58,7 +62,32 @@ const OptionButton = styled.button`
   }
 `;
 
+const BackButton = styled.button`
+  background: transparent;
+  border: 1px solid #cbd5e1;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-weight: bold;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+`;
+
+const ActiveModeHeader = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+`;
+
 export default function MapSelector({ selectedMapMode, setSelectedMapMode }) {
+  // Estado para controlar qual modo está selecionado na visualização
+  const [activeMode, setActiveMode] = useState(null);
+
   const GROUPED_MAPS = MAP_MODE_OPTIONS.reduce((acc, option) => {
     if (!acc[option.mode]) acc[option.mode] = [];
     acc[option.mode].push(option);
@@ -66,7 +95,7 @@ export default function MapSelector({ selectedMapMode, setSelectedMapMode }) {
   }, {});
 
   return (
-    <BaseCard>
+    <BaseCard style={{ marginBottom: "1.5rem" }}>
       <Header>
         <div>
           <span>MAP & MODE</span>
@@ -77,16 +106,44 @@ export default function MapSelector({ selectedMapMode, setSelectedMapMode }) {
       </Header>
 
       <GroupsContainer>
-        {Object.entries(GROUPED_MAPS).map(([mode, maps]) => (
-          <div key={mode}>
-            <GroupTitle>
-              {getModeIcon(mode) && (
-                <ModeIcon src={getModeIcon(mode)} alt={mode} />
-              )}
-              <span>{mode}</span>
+        {!activeMode ? (
+          // ETAPA 1: Mostrar apenas os Modos
+          <div>
+            <GroupTitle style={{ marginBottom: "1rem" }}>
+              Select a Game Mode
             </GroupTitle>
             <Grid>
-              {maps.map((option) => (
+              {Object.keys(GROUPED_MAPS).map((mode) => (
+                <OptionButton
+                  key={mode}
+                  type="button"
+                  $selected={selectedMapMode.mode === mode}
+                  onClick={() => setActiveMode(mode)}
+                >
+                  {getModeIcon(mode) && (
+                    <ModeIcon src={getModeIcon(mode)} alt={mode} />
+                  )}
+                  <div>{mode}</div>
+                </OptionButton>
+              ))}
+            </Grid>
+          </div>
+        ) : (
+          // ETAPA 2: Mostrar os Mapas do Modo selecionado e o botão de Voltar
+          <div>
+            <ActiveModeHeader>
+              <BackButton onClick={() => setActiveMode(null)}>
+                ← Voltar
+              </BackButton>
+              <GroupTitle style={{ marginBottom: 0 }}>
+                {getModeIcon(activeMode) && (
+                  <ModeIcon src={getModeIcon(activeMode)} alt={activeMode} />
+                )}
+                <span>{activeMode} Maps</span>
+              </GroupTitle>
+            </ActiveModeHeader>
+            <Grid>
+              {GROUPED_MAPS[activeMode].map((option) => (
                 <OptionButton
                   key={option.map}
                   type="button"
@@ -98,7 +155,7 @@ export default function MapSelector({ selectedMapMode, setSelectedMapMode }) {
               ))}
             </Grid>
           </div>
-        ))}
+        )}
       </GroupsContainer>
     </BaseCard>
   );
