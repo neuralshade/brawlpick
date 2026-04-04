@@ -254,7 +254,7 @@ function MatchMaker({ savedComps, setSavedComps }) {
 
   return (
     <AppShell>
-      {/* 1. SEÇÃO DE BANIMENTOS (NO TOPO) */}
+      {/* 1. SEÇÃO DE BANIMENTOS */}
       <PickGrid style={{ marginBottom: "1.5rem" }}>
         <BanColumn>
           <TeamHeader>
@@ -323,13 +323,7 @@ function MatchMaker({ savedComps, setSavedComps }) {
         </BanColumn>
       </PickGrid>
 
-      {/* 2. SELEÇÃO DE MAPA E MODO (NO MEIO) */}
-      <MapSelector
-        selectedMapMode={selectedMapMode}
-        setSelectedMapMode={setSelectedMapMode}
-      />
-
-      {/* 3. SEÇÃO DOS PICKS (UM DO LADO DO OUTRO) */}
+      {/* 2. SEÇÃO DOS PICKS (UM DO LADO DO OUTRO) */}
       <PickGrid style={{ marginBottom: "1.5rem" }}>
         <TeamColumn
           teamName="BLUE TEAM"
@@ -351,7 +345,15 @@ function MatchMaker({ savedComps, setSavedComps }) {
         />
       </PickGrid>
 
-      {/* 4. NOTAS E BOTÃO DE SALVAR (NO FINAL) */}
+      {/* 3. SELEÇÃO DE MAPA E MODO */}
+      <div style={{ marginBottom: "1.5rem" }}>
+        <MapSelector
+          selectedMapMode={selectedMapMode}
+          setSelectedMapMode={setSelectedMapMode}
+        />
+      </div>
+
+      {/* 4. NOTAS E BOTÃO DE SALVAR */}
       <BaseCard style={{ padding: "1.25rem", marginBottom: "1.5rem" }}>
         <NotesTextarea
           placeholder="Strategic notes for this map/draft (e.g., Rotate through the left bush, focus on mid control...)"
