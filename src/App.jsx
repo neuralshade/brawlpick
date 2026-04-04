@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import styled from "styled-components";
 import { GlobalStyles } from "./styles/GlobalStyles";
@@ -79,22 +79,41 @@ const NavLink = styled(Link)`
 `;
 
 function App() {
-  const [savedComps, setSavedComps] = useState([]);
   const fileInputRef = useRef(null);
 
-  // Função para exportar os dados guardados
+  // 1. Inicializa o estado lendo do localStorage (se houver dados guardados)
+  const [savedComps, setSavedComps] = useState(() => {
+    try {
+      const localData = localStorage.getItem("brawlpick_data_cache");
+      return localData ? JSON.parse(localData) : [];
+    } catch (error) {
+      console.error("Erro ao ler do localStorage", error);
+      return [];
+    }
+  });
+
+  // 2. Efeito para guardar os dados no localStorage sempre que houver alterações
+  useEffect(() => {
+    try {
+      localStorage.setItem("brawlpick_data_cache", JSON.stringify(savedComps));
+    } catch (error) {
+      console.error("Erro ao guardar no localStorage", error);
+    }
+  }, [savedComps]);
+
+  // Função para exportar os dados guardados (Backup)
   const handleExport = () => {
     const dataStr = JSON.stringify(savedComps, null, 2);
     const blob = new Blob([dataStr], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "brawlpick_data.json"; // Nome estático para facilitar sobreposição
+    a.download = "brawlpick_backup.json"; 
     a.click();
     URL.revokeObjectURL(url);
   };
 
-  // Função para importar e ler um JSON
+  // Função para importar e ler um JSON (Restaurar backup)
   const handleImport = (event) => {
     const file = event.target.files[0];
     if (!file) return;
@@ -104,8 +123,8 @@ function App() {
       try {
         const json = JSON.parse(e.target.result);
         if (Array.isArray(json)) {
-          setSavedComps(json);
-          alert("Ficheiro JSON carregado com sucesso!");
+          setSavedComps(json); // Ao atualizar o estado aqui, o useEffect trata de gravar no localStorage
+          alert("Ficheiro JSON carregado e restaurado com sucesso!");
         } else {
           alert("Formato inválido. O JSON tem de ser um array de dados.");
         }
