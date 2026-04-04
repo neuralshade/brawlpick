@@ -147,7 +147,7 @@ function App() {
         </LinksGroup>
         <ActionsGroup>
           <ActionButton onClick={() => fileInputRef.current.click()}>
-            Carregar JSON
+            Open
           </ActionButton>
           <input
             type="file"
@@ -156,7 +156,7 @@ function App() {
             ref={fileInputRef}
             onChange={handleImport}
           />
-          <ActionButton onClick={handleExport}>Guardar JSON</ActionButton>
+          <ActionButton onClick={handleExport}>Backup</ActionButton>
         </ActionsGroup>
       </NavContainer>
 

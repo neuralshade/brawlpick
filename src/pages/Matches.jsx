@@ -81,23 +81,22 @@ const BansRow = styled.div`
   gap: 8px;
   padding: 8px;
   background: rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
   margin-bottom: 12px;
   align-items: center;
 
   span {
-    font-size: 0.75rem;
+    font-size: 1rem;
     color: #94a3b8;
     font-weight: bold;
   }
 `;
 
 const BanImg = styled.img`
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  border: 1px solid #ef4444;
+  width: 38px;
+  height: 38px;
+  border: 2px solid #000000;
   object-fit: cover;
+  background-color: #ffffff;
 `;
 
 const SlotRow = styled.div`
@@ -126,9 +125,8 @@ const SlotInfo = styled.div`
 const SlotAvatar = styled.img`
   width: 52px;
   height: 52px;
-  border-radius: 0.95rem;
   background: #ffffff;
-  border: 1px solid #d1d5db;
+  border: 2px solid #000000;
   object-fit: cover;
 `;
 
